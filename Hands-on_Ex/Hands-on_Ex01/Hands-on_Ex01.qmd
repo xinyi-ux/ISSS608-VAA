@@ -28,3 +28,57 @@ ggplot(data = exam_data,
        aes(x= RACE))+
   geom_bar()
 ```
+
+Essential Grammatical Elements in ggplot2: data
+ 
+```{r}
+ggplot(data=exam_data)
+```
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+
+Geometric Objects: geom_bar
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+
+Geometric Objects: geom_dotplot
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(dotsize = 0.5)
+```
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot(binwidth=2.5,         
+               dotsize = 0.5) +      
+  scale_y_continuous(NULL,           
+                     breaks = NULL)  
+```
+
+Geometric Objects: geom_histogram()
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram()       
+```
+
+ Modifying a geometric object by changing geom()
+ 
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20,            
+                 color="black",      
+                 fill="light blue")  
+```
+
