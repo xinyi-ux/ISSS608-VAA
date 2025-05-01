@@ -212,6 +212,7 @@ girafe(
   height_svg = 6*0.618                      
 )                                        
 ```
+
 ### 3.6.4 Styling hover effect
 
 In the code chunk below, css codes are used to change the highlighting effect.
@@ -439,4 +440,3 @@ Things to learn from the code chunk:
 *highlight()* is a function of **plotly** package. It sets a variety of options for brushing (i.e., highlighting) multiple plots. These options are primarily designed for linking multiple plotly graphs, and may not behave as expected when linking plotly to another htmlwidget package via crosstalk. In some cases, other htmlwidgets will respect these options, such as persistent selection in leaflet.
 
 *bscols()* is a helper function of **crosstalk** package. It makes it easy to put HTML elements side by side. It can be called directly from the console but is especially designed to work in an R Markdown document. **Warning**: This will bring in all of Bootstrap!.
- 

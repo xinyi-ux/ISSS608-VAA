@@ -3,9 +3,18 @@ project:
 
 website:
   title: "ISSS608-VAA"
+  image: "hello kitty sanrio icon.jpeg"        
+  favicon: "hello kitty sanrio icon.jpeg"
+  page-navigation: true
   navbar:
+    logo: "hello kitty sanrio widget icon 3D.jpeg"        
+    title: false                                  
+    collapse-below: lg
+    background: "#FFC0CB"
+    search: true
+    
     left:
-      - text: "Hands-on Excercise"
+      - text: "Hands-on Exercise"
         menu:  
           -  text: "Hands-on Exercise 1"
              href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
@@ -18,6 +27,11 @@ website:
              
           - text: "Hands-on Exercise 4"
             href: "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_b.html"
+    
+      - text: "Take-home Exercise"
+        menu: 
+         - text: "Take-home Exercise 1"
+           href: "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html"
     right:
      - href: index.qmd
        text: Home
