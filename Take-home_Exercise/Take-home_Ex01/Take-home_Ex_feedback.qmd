@@ -1,7 +1,7 @@
 ---
 title: "Take-home_Ex_feedback"
 author: "Xu Xnyi"
-format: html
+format: pdf
 editor: visual
 date-modified: "last-modified"
 execute: 
@@ -54,8 +54,13 @@ pacman::p_load(tidyverse, ggplot2, ggrepel, patchwork,
                ggthemes,dplyr, xml12, sf, scales) 
 ```
 
+
 ```{r}
 sgResData24 <- read_csv("respopagesex2024.csv")
+```
+
+```{r}
+distinct(sgResData24)
 ```
 
 ```{r}
@@ -147,21 +152,6 @@ sgResData24 <- sgResData24 %>% mutate(PA = toupper(PA)) %>%
 print(sgResData24)
 ```
 
-```{r}
-# Transform PA to uppercase
-sgResData24 <- sgResData24 %>%
-  mutate(PA = toupper(PA))
-
-region_info <- info_df %>%
-  rename(PA = Town) %>%
-  mutate(PA = toupper(PA))  # Add this line
-```
-
-```{r}
-sgResData24 <- sgResData24 %>%
-  left_join(region_info, by = "PA")
-```
-
 -   [Ridgeline plot](https://data-to-viz.com/graph/ridgeline.html)  :
 
 **stat_halfeye()** is used for density plots
@@ -183,6 +173,10 @@ sgResData24 <- sgResData24 %>%
 -   **Inserting the Legend into the Main Plot**
 
     -   The `inset_element` function combines the main plot (`p`) and the legend (`p_legend`) by embedding the legend within the main plot’s space
+    
+```{r}
+glimpse(sgResData24)
+```
 
 ```{r}
 library(ggdist)
@@ -239,8 +233,8 @@ p
 
 <!-- -->
 
--    **West and North-East Regions** have younger populations on average.
+-   **West and North-East Regions** have younger populations on average.
 
 <!-- -->
 
--    The **spread** (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.
+-   The **spread** (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.
