@@ -4,6 +4,4 @@ title: "ISSS608-VAA"
 
 ![](download.jpeg){style="float: left; margin-right: 20px;" width="200"}
 
-
- 
 Welcome to **ISSS608 VIsual Analytics and Appllications**. In the website, you will find my coursework prepared for this course.

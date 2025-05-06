@@ -30,7 +30,17 @@ website:
             
           - text: "Hands-on Exercise 4_a"
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_a.html"
-    
+          
+          - text: "Hands-on Exercise 4_b"
+            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html"
+            
+          - text: "Hands-on Exercise 4_c"
+            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html"
+            
+          - text: "Hands-on Exercise 4_d"
+            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html"
+            
+            
       - text: "Take-home Exercise"
         menu: 
          - text: "Take-home Exercise 1"

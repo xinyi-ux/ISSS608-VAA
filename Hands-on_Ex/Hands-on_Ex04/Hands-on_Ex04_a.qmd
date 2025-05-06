@@ -280,7 +280,8 @@ In this section, you will learn how to create a raincloud plot to visualise the 
 
 First, we will plot a Half-Eye graph by using [stat_halfeye()](https://mjskay.github.io/ggdist/reference/stat_halfeye.html) of ggdist package.
 
-This produces a Half Eye visualization, which is contains a half-density and a slab-interval. :::panel-tabset
+This produces a Half Eye visualization, which is contains a half-density and a slab-interval. 
+:::panel-tabset
 
 ### The plot
 
@@ -306,9 +307,12 @@ ggplot(exam,
                point_colour = NA)
 ```
 
-::: \## Adding the boxplot with geom_boxplot()
+::: 
+## Adding the boxplot with geom_boxplot()
 
-Next, we will add the second geometry layer using geom_boxplot() of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity. :::panel-tabset \### The plot
+Next, we will add the second geometry layer using geom_boxplot() of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity. 
+:::panel-tabset 
+### The plot
 
 ```{r}
 ggplot(exam, 
@@ -428,5 +432,5 @@ ggplot(exam,
 
 # Reference
 
-- [Introducing Ridgeline Plots (formerly Joyplots)](https://blog.revolutionanalytics.com/2017/07/joyplots.html)
-- [Dots + interval stats and geoms](https://mjskay.github.io/ggdist/articles/dotsinterval.html)
+-   [Introducing Ridgeline Plots (formerly Joyplots)](https://blog.revolutionanalytics.com/2017/07/joyplots.html)
+-   [Dots + interval stats and geoms](https://mjskay.github.io/ggdist/articles/dotsinterval.html)
