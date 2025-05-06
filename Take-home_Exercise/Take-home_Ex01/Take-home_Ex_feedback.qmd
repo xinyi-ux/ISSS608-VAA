@@ -1,0 +1,246 @@
+---
+title: "Take-home_Ex_feedback"
+author: "Xu Xnyi"
+format: html
+editor: visual
+date-modified: "last-modified"
+execute: 
+       echo: true 
+       eval: true 
+       warning: false 
+       freeze: true
+---
+
+# Selecting the work from: Ng Jin Yao
+
+# Three good design principles:
+
+1.  Clear obijective and data processing: Data wrangling ensures accuracy and relevance in your visualizations. Addtionally, from the starter, stating out the data we are going to analyze which can make more sense for later visualization.
+
+-   Duplicates using distinct()
+
+-   Data types (e.g., converting Age from chr to dbl)
+
+-   New features like Age_group and Region using mutate() and case_when()
+
+-   Joining with geographic metadata using left_join() after transforming the PA column
+
+2.  Visual diversity:There are three different visualization types tailored to the data's characteristics.
+
+-   A population pyramid to illustrate age-sex structure (a demographic standard)
+
+-   A bar chart comparing regions by population and sex composition
+
+-   A half-eye + boxplot to examine age distribution patterns by region
+
+3.  Transform geographic data: Extracting geographic data from 'MasterPlan2019PlanningAreaBoundaryNoSea.geojson'(Town and Regions are based on the MasterPlan 2019). This can gave better and more accurate data about Town and Regions which can prevent any mistakes from the original datasets.
+
+# Three areas for further improvement:
+
+1.  Lack of Weighted Mean Calculation Code in Population Pyramid Plot Visualisation Issue: You mention weighted means (using population count as weight) for each region but don’t show how you computed them.
+
+2.  Reproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.
+
+3.  Half-eye + Box Plot Visualisation of Age vs Region needs to change to more readable version and be straightforward.
+
+# Make-over version of data visualization-Half-eye + Box Plot Visualisation of Age vs Region
+
+**Ridgeline plot with inside plot and annotations**: it conveys the ridgeline plot is a type of chart that displays the distribution of a numeric variable for several groups.
+
+# Plot
+
+```{r}
+pacman::p_load(tidyverse, ggplot2, ggrepel, patchwork, 
+               ggthemes,dplyr, xml12, sf, scales) 
+```
+
+```{r}
+sgResData24 <- read_csv("respopagesex2024.csv")
+```
+
+```{r}
+sgResData24 <- sgResData24 %>%
+  mutate(
+    # Convert age to numeric, handle "90_and_Over"
+    Age_num = case_when(
+      Age == "90_and_Over" ~ 90,
+      TRUE ~ suppressWarnings(as.numeric(Age))  # Avoid warnings from "90_and_Over"
+    ),
+    
+    # Group into age bands
+    Age_group = case_when(
+      Age_num >= 0 & Age_num <= 9   ~ "0-9",
+      Age_num >= 10 & Age_num <= 19 ~ "10-19",
+      Age_num >= 20 & Age_num <= 29 ~ "20-29",
+      Age_num >= 30 & Age_num <= 39 ~ "30-39",
+      Age_num >= 40 & Age_num <= 49 ~ "40-49",
+      Age_num >= 50 & Age_num <= 59 ~ "50-59",
+      Age_num >= 60 & Age_num <= 69 ~ "60-69",
+      Age_num >= 70 & Age_num <= 79 ~ "70-79",
+      Age_num >= 80 & Age_num <= 89 ~ "80-89",
+      Age_num >= 90                ~ "90+",
+      TRUE                         ~ NA_character_
+    )
+  )
+```
+
+```{r}
+#Install required packages if not already installed
+library(sf)
+library(xml2)
+library(dplyr)
+
+# Load the GeoJSON file
+geo_data <- st_read("MasterPlan2019PlanningAreaBoundaryNoSea.geojson")
+```
+
+```{r}
+# Function to parse HTML and extract PLN_AREA_N and REGION_N
+extract_info <- function(html_str) {
+  doc <- read_html(html_str)
+  rows <- xml_find_all(doc, ".//tr")
+
+  # Loop through rows and extract key-value pairs
+  data <- lapply(rows, function(row) {
+    th <- xml_text(xml_find_first(row, ".//th"))
+    td <- xml_text(xml_find_first(row, ".//td"))
+    if (!is.na(th) && !is.na(td)) {
+      return(setNames(list(td), th))
+    } else {
+      return(NULL)
+    }
+  })
+
+  # Combine and extract specific fields
+  info <- do.call(c, data)
+  list(
+    Town = info[["PLN_AREA_N"]],
+    Region = info[["REGION_N"]]
+  )
+}
+
+
+# Apply the extraction function to each row
+info_list <- lapply(geo_data$Description, extract_info)
+
+# Combine results into a data frame
+info_df <- bind_rows(info_list) %>% distinct() %>% arrange(Region, Town)
+
+# View result
+print(info_df)
+```
+
+```{r}
+sgResData24 %>% mutate(PA = toupper(PA))
+```
+
+```{r}
+library(dplyr)
+
+# Rename Town to PA in the region info dataframe
+region_info <- info_df %>% rename(PA = Town)
+
+# left join sgResData24 with region_info to get Region column
+sgResData24 <- sgResData24 %>% mutate(PA = toupper(PA)) %>%
+  left_join(region_info, by = "PA")
+
+print(sgResData24)
+```
+
+```{r}
+# Transform PA to uppercase
+sgResData24 <- sgResData24 %>%
+  mutate(PA = toupper(PA))
+
+region_info <- info_df %>%
+  rename(PA = Town) %>%
+  mutate(PA = toupper(PA))  # Add this line
+```
+
+```{r}
+sgResData24 <- sgResData24 %>%
+  left_join(region_info, by = "PA")
+```
+
+-   [Ridgeline plot](https://data-to-viz.com/graph/ridgeline.html)  :
+
+**stat_halfeye()** is used for density plots
+
+**stat_summary()** for showing medians
+
+**annotate()** adds static text annotations
+
+**scale\_()** functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()
+
+**coord_flip()** flips the axes to change the plot orientation
+
+-   **Legend Construction (`p_legend`)**
+
+    -   We use a subset of data (`rent_title_words`) filtered for the word *beautiful*
+
+    -   And `geom_curve` to draw arrows pointing to specific elements
+
+-   **Inserting the Legend into the Main Plot**
+
+    -   The `inset_element` function combines the main plot (`p`) and the legend (`p_legend`) by embedding the legend within the main plot’s space
+
+```{r}
+library(ggdist)
+library(ggtext)
+
+
+# Compute weighted mean for each region
+mean_age <- sgResData24 %>%
+  group_by(Region) %>%
+  summarise(weighted_mean = weighted.mean(Age_num, Pop, na.rm = TRUE))
+
+# Theme and background setup
+bg_color <- "grey97"
+font_family <- "Fira Sans"
+
+plot_subtitle <- glue::glue("Age distribution by Singapore regions in 2024.\nRed diamonds show the population-weighted mean age.")
+
+# Main plot
+p <- ggplot(sgResData24, aes(x = Region, y = Age_num, weight = Pop)) +
+  stat_halfeye(fill_type = "segments", alpha = 0.3) +
+  stat_interval() +
+  stat_summary(geom = "point", fun = median, color = "black") +
+  geom_point(data = mean_age, aes(x = Region, y = weighted_mean), 
+             color = "red", size = 3, shape = 18, inherit.aes = FALSE) +
+  scale_x_discrete(labels = stringr::str_to_title) +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 10)) +
+  coord_flip() +
+  labs(
+    title = toupper("AGE DISTRIBUTION BY REGION"),
+    subtitle = plot_subtitle,
+    caption = "Data: Singapore Department of Statistics, 2024",
+    x = NULL,
+    y = "Age"
+  ) +
+  theme_minimal(base_family = font_family) +
+  theme(
+    plot.background = element_rect(color = NA, fill = bg_color),
+    panel.grid = element_blank(),
+    panel.grid.major.x = element_line(linewidth = 0.1, color = "grey75"),
+    plot.title = element_text(family = "Fira Sans SemiBold"),
+    plot.subtitle = ggtext::element_textbox_simple(margin = margin(t = 4, b = 16), size = 10),
+    plot.caption = ggtext::element_textbox_simple(margin = margin(t = 12), size = 8),
+    axis.text.y = element_text(hjust = 0, margin = margin(r = -10), family = "Fira Sans SemiBold"),
+    plot.margin = margin(4, 4, 4, 4)
+  )
+
+```
+
+```{r}
+p
+```
+
+-   **Central Region** has the **oldest average age**.
+
+<!-- -->
+
+-    **West and North-East Regions** have younger populations on average.
+
+<!-- -->
+
+-    The **spread** (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.
