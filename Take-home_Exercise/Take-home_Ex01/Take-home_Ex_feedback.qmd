@@ -1,7 +1,7 @@
 ---
 title: "Take-home_Ex_feedback"
 author: "Xu Xnyi"
-format: pdf
+format: html 
 editor: visual
 date-modified: "last-modified"
 execute: 
@@ -53,7 +53,6 @@ execute:
 pacman::p_load(tidyverse, ggplot2, ggrepel, patchwork, 
                ggthemes,dplyr, xml12, sf, scales) 
 ```
-
 
 ```{r}
 sgResData24 <- read_csv("respopagesex2024.csv")
@@ -173,7 +172,7 @@ print(sgResData24)
 -   **Inserting the Legend into the Main Plot**
 
     -   The `inset_element` function combines the main plot (`p`) and the legend (`p_legend`) by embedding the legend within the main plot’s space
-    
+
 ```{r}
 glimpse(sgResData24)
 ```
@@ -181,7 +180,8 @@ glimpse(sgResData24)
 ```{r}
 library(ggdist)
 library(ggtext)
-
+library(extrafont) 
+font_import()
 
 # Compute weighted mean for each region
 mean_age <- sgResData24 %>%
@@ -216,10 +216,10 @@ p <- ggplot(sgResData24, aes(x = Region, y = Age_num, weight = Pop)) +
     plot.background = element_rect(color = NA, fill = bg_color),
     panel.grid = element_blank(),
     panel.grid.major.x = element_line(linewidth = 0.1, color = "grey75"),
-    plot.title = element_text(family = "Fira Sans SemiBold"),
+    plot.title = element_text(family = "Serif"),
     plot.subtitle = ggtext::element_textbox_simple(margin = margin(t = 4, b = 16), size = 10),
     plot.caption = ggtext::element_textbox_simple(margin = margin(t = 12), size = 8),
-    axis.text.y = element_text(hjust = 0, margin = margin(r = -10), family = "Fira Sans SemiBold"),
+    axis.text.y = element_text(hjust = 0, margin = margin(r = -10), family = "Serif"),
     plot.margin = margin(4, 4, 4, 4)
   )
 
