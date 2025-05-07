@@ -33,11 +33,11 @@ execute:
 
 -   A half-eye + boxplot to examine age distribution patterns by region
 
-3.  Transform geographic data: Extracting geographic data from 'MasterPlan2019PlanningAreaBoundaryNoSea.geojson'(Town and Regions are based on the MasterPlan 2019). This can gave better and more accurate data about Town and Regions which can prevent any mistakes from the original datasets.
+3.  More concise labels in the data visualization: In the Population Pyramid Plot Visualisation, "Female/Male" is right above the graph which make the visualization more concise. There is no need to put the "gender" legend again. 
 
 # Three areas for further improvement:
 
-1.  Lack of Weighted Mean Calculation Code in Population Pyramid Plot Visualisation Issue: You mention weighted means (using population count as weight) for each region but don’t show how you computed them.
+1.  In this take-home exercise, it is not necessary to use geospatial method to do visualization or data-processing. 
 
 2.  Reproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.
 

@@ -7,81 +7,11 @@
     "text": "Selecting the work from: Ng Jin Yao\n\n\nThree good design principles:\n\nClear obijective and data processing: Data wrangling ensures accuracy and relevance in your visualizations. Addtionally, from the starter, stating out the data we are going to analyze which can make more sense for later visualization.\n\n\nDuplicates using distinct()\nData types (e.g., converting Age from chr to dbl)\nNew features like Age_group and Region using mutate() and case_when()\nJoining with geographic metadata using left_join() after transforming the PA column\n\n\nVisual diversity:There are three different visualization types tailored to the data’s characteristics.\n\n\nA population pyramid to illustrate age-sex structure (a demographic standard)\nA bar chart comparing regions by population and sex composition\nA half-eye + boxplot to examine age distribution patterns by region\n\n\nTransform geographic data: Extracting geographic data from ‘MasterPlan2019PlanningAreaBoundaryNoSea.geojson’(Town and Regions are based on the MasterPlan 2019). This can gave better and more accurate data about Town and Regions which can prevent any mistakes from the original datasets.\n\n\n\nThree areas for further improvement:\n\nLack of Weighted Mean Calculation Code in Population Pyramid Plot Visualisation Issue: You mention weighted means (using population count as weight) for each region but don’t show how you computed them.\nReproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.\nHalf-eye + Box Plot Visualisation of Age vs Region needs to change to more readable version and be straightforward.\n\n\n\nMake-over version of data visualization-Half-eye + Box Plot Visualisation of Age vs Region\nRidgeline plot with inside plot and annotations: it conveys the ridgeline plot is a type of chart that displays the distribution of a numeric variable for several groups.\n\n\nPlot\n\npacman::p_load(tidyverse, ggplot2, ggrepel, patchwork, \n               ggthemes,dplyr, xml12, sf, scales) \n\n\nsgResData24 &lt;- read_csv(\"respopagesex2024.csv\")\n\n\ndistinct(sgResData24)\n\n# A tibble: 60,424 × 6\n   PA         SZ                     Age   Sex       Pop  Time\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;\n 1 Ang Mo Kio Ang Mo Kio Town Centre 0     Males      10  2024\n 2 Ang Mo Kio Ang Mo Kio Town Centre 0     Females    10  2024\n 3 Ang Mo Kio Ang Mo Kio Town Centre 1     Males      10  2024\n 4 Ang Mo Kio Ang Mo Kio Town Centre 1     Females    10  2024\n 5 Ang Mo Kio Ang Mo Kio Town Centre 2     Males      10  2024\n 6 Ang Mo Kio Ang Mo Kio Town Centre 2     Females    10  2024\n 7 Ang Mo Kio Ang Mo Kio Town Centre 3     Males      10  2024\n 8 Ang Mo Kio Ang Mo Kio Town Centre 3     Females    10  2024\n 9 Ang Mo Kio Ang Mo Kio Town Centre 4     Males      30  2024\n10 Ang Mo Kio Ang Mo Kio Town Centre 4     Females    10  2024\n# ℹ 60,414 more rows\n\n\n\nsgResData24 &lt;- sgResData24 %&gt;%\n  mutate(\n    # Convert age to numeric, handle \"90_and_Over\"\n    Age_num = case_when(\n      Age == \"90_and_Over\" ~ 90,\n      TRUE ~ suppressWarnings(as.numeric(Age))  # Avoid warnings from \"90_and_Over\"\n    ),\n    \n    # Group into age bands\n    Age_group = case_when(\n      Age_num &gt;= 0 & Age_num &lt;= 9   ~ \"0-9\",\n      Age_num &gt;= 10 & Age_num &lt;= 19 ~ \"10-19\",\n      Age_num &gt;= 20 & Age_num &lt;= 29 ~ \"20-29\",\n      Age_num &gt;= 30 & Age_num &lt;= 39 ~ \"30-39\",\n      Age_num &gt;= 40 & Age_num &lt;= 49 ~ \"40-49\",\n      Age_num &gt;= 50 & Age_num &lt;= 59 ~ \"50-59\",\n      Age_num &gt;= 60 & Age_num &lt;= 69 ~ \"60-69\",\n      Age_num &gt;= 70 & Age_num &lt;= 79 ~ \"70-79\",\n      Age_num &gt;= 80 & Age_num &lt;= 89 ~ \"80-89\",\n      Age_num &gt;= 90                ~ \"90+\",\n      TRUE                         ~ NA_character_\n    )\n  )\n\n\n#Install required packages if not already installed\nlibrary(sf)\nlibrary(xml2)\nlibrary(dplyr)\n\n# Load the GeoJSON file\ngeo_data &lt;- st_read(\"MasterPlan2019PlanningAreaBoundaryNoSea.geojson\")\n\nReading layer `MasterPlan2019PlanningAreaBoundaryNoSea' from data source \n  `C:\\xinyi-ux\\ISSS608-VAA\\Take-home_Exercise\\Take-home_Ex01\\MasterPlan2019PlanningAreaBoundaryNoSea.geojson' \n  using driver `GeoJSON'\nSimple feature collection with 55 features and 2 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775\nGeodetic CRS:  WGS 84\n\n\n\n# Function to parse HTML and extract PLN_AREA_N and REGION_N\nextract_info &lt;- function(html_str) {\n  doc &lt;- read_html(html_str)\n  rows &lt;- xml_find_all(doc, \".//tr\")\n\n  # Loop through rows and extract key-value pairs\n  data &lt;- lapply(rows, function(row) {\n    th &lt;- xml_text(xml_find_first(row, \".//th\"))\n    td &lt;- xml_text(xml_find_first(row, \".//td\"))\n    if (!is.na(th) && !is.na(td)) {\n      return(setNames(list(td), th))\n    } else {\n      return(NULL)\n    }\n  })\n\n  # Combine and extract specific fields\n  info &lt;- do.call(c, data)\n  list(\n    Town = info[[\"PLN_AREA_N\"]],\n    Region = info[[\"REGION_N\"]]\n  )\n}\n\n\n# Apply the extraction function to each row\ninfo_list &lt;- lapply(geo_data$Description, extract_info)\n\n# Combine results into a data frame\ninfo_df &lt;- bind_rows(info_list) %&gt;% distinct() %&gt;% arrange(Region, Town)\n\n# View result\nprint(info_df)\n\n# A tibble: 55 × 2\n   Town          Region        \n   &lt;chr&gt;         &lt;chr&gt;         \n 1 BISHAN        CENTRAL REGION\n 2 BUKIT MERAH   CENTRAL REGION\n 3 BUKIT TIMAH   CENTRAL REGION\n 4 DOWNTOWN CORE CENTRAL REGION\n 5 GEYLANG       CENTRAL REGION\n 6 KALLANG       CENTRAL REGION\n 7 MARINA EAST   CENTRAL REGION\n 8 MARINA SOUTH  CENTRAL REGION\n 9 MARINE PARADE CENTRAL REGION\n10 MUSEUM        CENTRAL REGION\n# ℹ 45 more rows\n\n\n\nsgResData24 %&gt;% mutate(PA = toupper(PA))\n\n# A tibble: 60,424 × 8\n   PA         SZ                     Age   Sex       Pop  Time Age_num Age_group\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    \n 1 ANG MO KIO Ang Mo Kio Town Centre 0     Males      10  2024       0 0-9      \n 2 ANG MO KIO Ang Mo Kio Town Centre 0     Females    10  2024       0 0-9      \n 3 ANG MO KIO Ang Mo Kio Town Centre 1     Males      10  2024       1 0-9      \n 4 ANG MO KIO Ang Mo Kio Town Centre 1     Females    10  2024       1 0-9      \n 5 ANG MO KIO Ang Mo Kio Town Centre 2     Males      10  2024       2 0-9      \n 6 ANG MO KIO Ang Mo Kio Town Centre 2     Females    10  2024       2 0-9      \n 7 ANG MO KIO Ang Mo Kio Town Centre 3     Males      10  2024       3 0-9      \n 8 ANG MO KIO Ang Mo Kio Town Centre 3     Females    10  2024       3 0-9      \n 9 ANG MO KIO Ang Mo Kio Town Centre 4     Males      30  2024       4 0-9      \n10 ANG MO KIO Ang Mo Kio Town Centre 4     Females    10  2024       4 0-9      \n# ℹ 60,414 more rows\n\n\n\nlibrary(dplyr)\n\n# Rename Town to PA in the region info dataframe\nregion_info &lt;- info_df %&gt;% rename(PA = Town)\n\n# left join sgResData24 with region_info to get Region column\nsgResData24 &lt;- sgResData24 %&gt;% mutate(PA = toupper(PA)) %&gt;%\n  left_join(region_info, by = \"PA\")\n\nprint(sgResData24)\n\n# A tibble: 60,424 × 9\n   PA         SZ                Age   Sex     Pop  Time Age_num Age_group Region\n   &lt;chr&gt;      &lt;chr&gt;             &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; \n 1 ANG MO KIO Ang Mo Kio Town … 0     Males    10  2024       0 0-9       NORTH…\n 2 ANG MO KIO Ang Mo Kio Town … 0     Fema…    10  2024       0 0-9       NORTH…\n 3 ANG MO KIO Ang Mo Kio Town … 1     Males    10  2024       1 0-9       NORTH…\n 4 ANG MO KIO Ang Mo Kio Town … 1     Fema…    10  2024       1 0-9       NORTH…\n 5 ANG MO KIO Ang Mo Kio Town … 2     Males    10  2024       2 0-9       NORTH…\n 6 ANG MO KIO Ang Mo Kio Town … 2     Fema…    10  2024       2 0-9       NORTH…\n 7 ANG MO KIO Ang Mo Kio Town … 3     Males    10  2024       3 0-9       NORTH…\n 8 ANG MO KIO Ang Mo Kio Town … 3     Fema…    10  2024       3 0-9       NORTH…\n 9 ANG MO KIO Ang Mo Kio Town … 4     Males    30  2024       4 0-9       NORTH…\n10 ANG MO KIO Ang Mo Kio Town … 4     Fema…    10  2024       4 0-9       NORTH…\n# ℹ 60,414 more rows\n\n\n\nRidgeline plot  :\n\nstat_halfeye() is used for density plots\nstat_summary() for showing medians\nannotate() adds static text annotations\nscale_() functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()\ncoord_flip() flips the axes to change the plot orientation\n\nLegend Construction (p_legend)\n\nWe use a subset of data (rent_title_words) filtered for the word beautiful\nAnd geom_curve to draw arrows pointing to specific elements\n\nInserting the Legend into the Main Plot\n\nThe inset_element function combines the main plot (p) and the legend (p_legend) by embedding the legend within the main plot’s space\n\n\n\nglimpse(sgResData24)\n\nRows: 60,424\nColumns: 9\n$ PA        &lt;chr&gt; \"ANG MO KIO\", \"ANG MO KIO\", \"ANG MO KIO\", \"ANG MO KIO\", \"ANG…\n$ SZ        &lt;chr&gt; \"Ang Mo Kio Town Centre\", \"Ang Mo Kio Town Centre\", \"Ang Mo …\n$ Age       &lt;chr&gt; \"0\", \"0\", \"1\", \"1\", \"2\", \"2\", \"3\", \"3\", \"4\", \"4\", \"5\", \"5\", …\n$ Sex       &lt;chr&gt; \"Males\", \"Females\", \"Males\", \"Females\", \"Males\", \"Females\", …\n$ Pop       &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 30, 10, 20, 10, 20, 30, 30, …\n$ Time      &lt;dbl&gt; 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, …\n$ Age_num   &lt;dbl&gt; 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, …\n$ Age_group &lt;chr&gt; \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9…\n$ Region    &lt;chr&gt; \"NORTH-EAST REGION\", \"NORTH-EAST REGION\", \"NORTH-EAST REGION…\n\n\n\nlibrary(ggdist)\nlibrary(ggtext)\nlibrary(extrafont) \nfont_import()\n\nImporting fonts may take a few minutes, depending on the number of fonts and the speed of the system.\nContinue? [y/n] \n\n# Compute weighted mean for each region\nmean_age &lt;- sgResData24 %&gt;%\n  group_by(Region) %&gt;%\n  summarise(weighted_mean = weighted.mean(Age_num, Pop, na.rm = TRUE))\n\n# Theme and background setup\nbg_color &lt;- \"grey97\"\nfont_family &lt;- \"Fira Sans\"\n\nplot_subtitle &lt;- glue::glue(\"Age distribution by Singapore regions in 2024.\\nRed diamonds show the population-weighted mean age.\")\n\n# Main plot\np &lt;- ggplot(sgResData24, aes(x = Region, y = Age_num, weight = Pop)) +\n  stat_halfeye(fill_type = \"segments\", alpha = 0.3) +\n  stat_interval() +\n  stat_summary(geom = \"point\", fun = median, color = \"black\") +\n  geom_point(data = mean_age, aes(x = Region, y = weighted_mean), \n             color = \"red\", size = 3, shape = 18, inherit.aes = FALSE) +\n  scale_x_discrete(labels = stringr::str_to_title) +\n  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 10)) +\n  coord_flip() +\n  labs(\n    title = toupper(\"AGE DISTRIBUTION BY REGION\"),\n    subtitle = plot_subtitle,\n    caption = \"Data: Singapore Department of Statistics, 2024\",\n    x = NULL,\n    y = \"Age\"\n  ) +\n  theme_minimal(base_family = font_family) +\n  theme(\n    plot.background = element_rect(color = NA, fill = bg_color),\n    panel.grid = element_blank(),\n    panel.grid.major.x = element_line(linewidth = 0.1, color = \"grey75\"),\n    plot.title = element_text(family = \"Serif\"),\n    plot.subtitle = ggtext::element_textbox_simple(margin = margin(t = 4, b = 16), size = 10),\n    plot.caption = ggtext::element_textbox_simple(margin = margin(t = 12), size = 8),\n    axis.text.y = element_text(hjust = 0, margin = margin(r = -10), family = \"Serif\"),\n    plot.margin = margin(4, 4, 4, 4)\n  )\n\n\np\n\n\n\n\n\n\n\n\n\nCentral Region has the oldest average age.\n\n\n\nWest and North-East Regions have younger populations on average.\n\n\n\nThe spread (width of intervals) is relatively similar, showing a broad mix of age groups in all regions."
   },
   {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html",
-    "title": "Take-home_Exercise01",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
     "section": "",
-    "text": "A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024.\n\n\n\nAssuming the role of the graphical editor of the media company, you are tasked to prepare at most three data visualisation for the article.The data should be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#setting-the-scene",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#setting-the-scene",
-    "title": "Take-home_Exercise01",
-    "section": "",
-    "text": "A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#our-task",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#our-task",
-    "title": "Take-home_Exercise01",
-    "section": "",
-    "text": "Assuming the role of the graphical editor of the media company, you are tasked to prepare at most three data visualisation for the article.The data should be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#loading-packages",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#loading-packages",
-    "title": "Take-home_Exercise01",
-    "section": "Loading packages",
-    "text": "Loading packages\nWe load the following R packages using the pacman::p_load() function:\n\ntidyverse: Core collection of R packages designed for data science.\nhaven: To read in data formats such as SAS and SPSS.\nggrepel: to provides geoms for ggplot2 to repel overlapping text labels.\nggthemes: to use additional themes for ggplot2.\npatchwork: to prepare composite figure created using ggplot2.\nggridges: to plot ridgeline plots.\nggdist: for visualizations of distributions and uncertainty.\nscales: provides the internal scaling infrastructure used by ggplot2.\n\n\npacman::p_load(tidyverse, haven,\n               ggrepel, ggthemes,\n               ggridges, ggdist,\n               patchwork, scales, ggExtra)"
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#import-data",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#import-data",
-    "title": "Take-home_Exercise01",
-    "section": "Import data",
-    "text": "Import data\nTo accomplish the task, Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024 dataset shares by Department of Statistics, Singapore (DOS) should be used.\nThe code chunk below imports respopagesex2024.csv into R environment by using read_csv()function of readr package. readr is one of the tidyverse package.\nWe import this dataset as sgresident\n\nsgresident &lt;- read_csv(\"respopagesex2024.csv \")"
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#data-pre-processing",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#data-pre-processing",
-    "title": "Take-home_Exercise01",
-    "section": "Data pre-processing",
-    "text": "Data pre-processing\nWe first take a look at the data and check if there are any duplicates."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#glimpse-of-data",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#glimpse-of-data",
-    "title": "Take-home_Exercise01",
-    "section": "Glimpse of data",
-    "text": "Glimpse of data\nUsing the glimpse() function, we see that the dataset consists of 60,424 rows and 6 columns. It also shows the data type of each columns and first few entries of each columns.\n\nglimpse(sgresident)\n\nRows: 60,424\nColumns: 6\n$ PA   &lt;chr&gt; \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo K…\n$ SZ   &lt;chr&gt; \"Ang Mo Kio Town Centre\", \"Ang Mo Kio Town Centre\", \"Ang Mo Kio T…\n$ Age  &lt;chr&gt; \"0\", \"0\", \"1\", \"1\", \"2\", \"2\", \"3\", \"3\", \"4\", \"4\", \"5\", \"5\", \"6\", …\n$ Sex  &lt;chr&gt; \"Males\", \"Females\", \"Males\", \"Females\", \"Males\", \"Females\", \"Male…\n$ Pop  &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 30, 10, 20, 10, 20, 30, 30, 10, 3…\n$ Time &lt;dbl&gt; 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024,…"
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-duplicates",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-duplicates",
-    "title": "Take-home_Exercise01",
-    "section": "Check for duplicates",
-    "text": "Check for duplicates\nUsing the duplicated() function, we see that there are no duplicate entries in the data.\n\nsgresident[duplicated(sgresident),]\n\n# A tibble: 0 × 6\n# ℹ 6 variables: PA &lt;chr&gt;, SZ &lt;chr&gt;, Age &lt;chr&gt;, Sex &lt;chr&gt;, Pop &lt;dbl&gt;,\n#   Time &lt;dbl&gt;\n\n\nThere is 0 rows that has duplicated results. The next step will be changing the inappropriate data type and checking for missing values as we needed. Due there are only 6 columns (which means 6 variables only), it is not neccessary for us to filter variables anymore."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#change-data-type-of-selected-variables",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#change-data-type-of-selected-variables",
-    "title": "Take-home_Exercise01",
-    "section": "Change data type of selected variables",
-    "text": "Change data type of selected variables\nVariables with inappropriate data type are Age, Sex, Time. Starting from Age:\nThe as.numeric() function in R is a crucial tool for data manipulation, allowing users to convert data into numeric form.\n\nsgresident &lt;- sgresident %&gt;% \n  mutate(Age = as.numeric(Age))\n\nConverting Sex column for better visualization, especially for consistent ordering and coloring in plots. Coloring in plots especially assign specific colors in ggplot2 will be easier. Converting Sec column to a factor with explicit levels: “Males” and “Females”. This can prevent mismatches or typos.\n\nsgresident &lt;- sgresident %&gt;%\n  mutate(Sex = factor(Sex, levels = c(\"Males\", \"Females\")))\n\nMaking sure about the Time column consisted of discrete numbers, transforming Time from  to  is the way to go.\n\nsgresident &lt;- sgresident %&gt;%\n  mutate(Time = as.integer(Time))"
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-missing-values",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-missing-values",
-    "title": "Take-home_Exercise01",
-    "section": "Check for missing values",
-    "text": "Check for missing values\nMany datasets store missing data as text placeholders like “NA” and “NULL”. But in R ecosystem, “NA” may not be recognized. Coverting data first can expose hidden issues and make accurate statistical summaries like using mean() and boxplot() functions. is.na() function can checkthe missing values for each columns.\n\ncolSums(is.na(sgresident ))\n\n  PA   SZ  Age  Sex  Pop Time \n   0    0  664    0    0    0 \n\n\nThe age column has 664 missing values, which have been stored as strings before data type conversion. In this case, we do not need to remove those data."
-  },
-  {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#preview-pre-processed-dataframe",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#preview-pre-processed-dataframe",
-    "title": "Take-home_Exercise01",
-    "section": "Preview pre-processed dataframe",
-    "text": "Preview pre-processed dataframe\nWe use the function head() to preview the first few rows of the pre-processed dataframe:\n\nhead(sgresident, 200)\n\n# A tibble: 200 × 6\n   PA         SZ                       Age Sex       Pop  Time\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;int&gt;\n 1 Ang Mo Kio Ang Mo Kio Town Centre     0 Males      10  2024\n 2 Ang Mo Kio Ang Mo Kio Town Centre     0 Females    10  2024\n 3 Ang Mo Kio Ang Mo Kio Town Centre     1 Males      10  2024\n 4 Ang Mo Kio Ang Mo Kio Town Centre     1 Females    10  2024\n 5 Ang Mo Kio Ang Mo Kio Town Centre     2 Males      10  2024\n 6 Ang Mo Kio Ang Mo Kio Town Centre     2 Females    10  2024\n 7 Ang Mo Kio Ang Mo Kio Town Centre     3 Males      10  2024\n 8 Ang Mo Kio Ang Mo Kio Town Centre     3 Females    10  2024\n 9 Ang Mo Kio Ang Mo Kio Town Centre     4 Males      30  2024\n10 Ang Mo Kio Ang Mo Kio Town Centre     4 Females    10  2024\n# ℹ 190 more rows"
+    "text": "Welcome to ISSS608 VIsual Analytics and Appllications. In the website, you will find my coursework prepared for this course."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html",
@@ -558,5 +488,82 @@
     "title": "Hands-on_Ex04_d",
     "section": "Interactive Funnel Plot: plotly + ggplot2",
     "text": "Interactive Funnel Plot: plotly + ggplot2\nThe funnel plot created using ggplot2 functions can be made interactive with ggplotly() of plotly r package.\n\nfp_ggplotly &lt;- ggplotly(p,\n  tooltip = c(\"label\", \n              \"x\", \n              \"y\"))\nfp_ggplotly"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html",
+    "title": "Take-home_Exercise01",
+    "section": "",
+    "text": "A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024.\n\n\n\nAssuming the role of the graphical editor of the media company, you are tasked to prepare at most three data visualisation for the article.The data should be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#setting-the-scene",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#setting-the-scene",
+    "title": "Take-home_Exercise01",
+    "section": "",
+    "text": "A local online media company that publishes daily content on digital platforms is planning to release an article on demographic structures and distribution of Singapore in 2024."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#our-task",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#our-task",
+    "title": "Take-home_Exercise01",
+    "section": "",
+    "text": "Assuming the role of the graphical editor of the media company, you are tasked to prepare at most three data visualisation for the article.The data should be processed by using appropriate tidyverse family of packages and the data visualisation must be prepared using ggplot2 and its extensions."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#loading-packages",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#loading-packages",
+    "title": "Take-home_Exercise01",
+    "section": "Loading packages",
+    "text": "Loading packages\nWe load the following R packages using the pacman::p_load() function:\n\ntidyverse: Core collection of R packages designed for data science.\nhaven: To read in data formats such as SAS and SPSS.\nggrepel: to provides geoms for ggplot2 to repel overlapping text labels.\nggthemes: to use additional themes for ggplot2.\npatchwork: to prepare composite figure created using ggplot2.\nggridges: to plot ridgeline plots.\nggdist: for visualizations of distributions and uncertainty.\nscales: provides the internal scaling infrastructure used by ggplot2.\n\n\npacman::p_load(tidyverse, haven,\n               ggrepel, ggthemes,\n               ggridges, ggdist,\n               patchwork, scales, ggExtra)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#import-data",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#import-data",
+    "title": "Take-home_Exercise01",
+    "section": "Import data",
+    "text": "Import data\nTo accomplish the task, Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024 dataset shares by Department of Statistics, Singapore (DOS) should be used.\nThe code chunk below imports respopagesex2024.csv into R environment by using read_csv()function of readr package. readr is one of the tidyverse package.\nWe import this dataset as sgresident\n\nsgresident &lt;- read_csv(\"respopagesex2024.csv \")"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#data-pre-processing",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#data-pre-processing",
+    "title": "Take-home_Exercise01",
+    "section": "Data pre-processing",
+    "text": "Data pre-processing\nWe first take a look at the data and check if there are any duplicates."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#glimpse-of-data",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#glimpse-of-data",
+    "title": "Take-home_Exercise01",
+    "section": "Glimpse of data",
+    "text": "Glimpse of data\nUsing the glimpse() function, we see that the dataset consists of 60,424 rows and 6 columns. It also shows the data type of each columns and first few entries of each columns.\n\nglimpse(sgresident)\n\nRows: 60,424\nColumns: 6\n$ PA   &lt;chr&gt; \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo Kio\", \"Ang Mo K…\n$ SZ   &lt;chr&gt; \"Ang Mo Kio Town Centre\", \"Ang Mo Kio Town Centre\", \"Ang Mo Kio T…\n$ Age  &lt;chr&gt; \"0\", \"0\", \"1\", \"1\", \"2\", \"2\", \"3\", \"3\", \"4\", \"4\", \"5\", \"5\", \"6\", …\n$ Sex  &lt;chr&gt; \"Males\", \"Females\", \"Males\", \"Females\", \"Males\", \"Females\", \"Male…\n$ Pop  &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 30, 10, 20, 10, 20, 30, 30, 10, 3…\n$ Time &lt;dbl&gt; 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024,…"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-duplicates",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-duplicates",
+    "title": "Take-home_Exercise01",
+    "section": "Check for duplicates",
+    "text": "Check for duplicates\nUsing the duplicated() function, we see that there are no duplicate entries in the data.\n\nsgresident[duplicated(sgresident),]\n\n# A tibble: 0 × 6\n# ℹ 6 variables: PA &lt;chr&gt;, SZ &lt;chr&gt;, Age &lt;chr&gt;, Sex &lt;chr&gt;, Pop &lt;dbl&gt;,\n#   Time &lt;dbl&gt;\n\n\nThere is 0 rows that has duplicated results. The next step will be changing the inappropriate data type and checking for missing values as we needed. Due there are only 6 columns (which means 6 variables only), it is not neccessary for us to filter variables anymore."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#change-data-type-of-selected-variables",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#change-data-type-of-selected-variables",
+    "title": "Take-home_Exercise01",
+    "section": "Change data type of selected variables",
+    "text": "Change data type of selected variables\nVariables with inappropriate data type are Age, Sex, Time. Starting from Age:\nThe as.numeric() function in R is a crucial tool for data manipulation, allowing users to convert data into numeric form.\n\nsgresident &lt;- sgresident %&gt;% \n  mutate(Age = as.numeric(Age))\n\nConverting Sex column for better visualization, especially for consistent ordering and coloring in plots. Coloring in plots especially assign specific colors in ggplot2 will be easier. Converting Sec column to a factor with explicit levels: “Males” and “Females”. This can prevent mismatches or typos.\n\nsgresident &lt;- sgresident %&gt;%\n  mutate(Sex = factor(Sex, levels = c(\"Males\", \"Females\")))\n\nMaking sure about the Time column consisted of discrete numbers, transforming Time from  to  is the way to go.\n\nsgresident &lt;- sgresident %&gt;%\n  mutate(Time = as.integer(Time))"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-missing-values",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#check-for-missing-values",
+    "title": "Take-home_Exercise01",
+    "section": "Check for missing values",
+    "text": "Check for missing values\nMany datasets store missing data as text placeholders like “NA” and “NULL”. But in R ecosystem, “NA” may not be recognized. Coverting data first can expose hidden issues and make accurate statistical summaries like using mean() and boxplot() functions. is.na() function can checkthe missing values for each columns.\n\ncolSums(is.na(sgresident ))\n\n  PA   SZ  Age  Sex  Pop Time \n   0    0  664    0    0    0 \n\n\nThe age column has 664 missing values, which have been stored as strings before data type conversion. In this case, we do not need to remove those data."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#preview-pre-processed-dataframe",
+    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html#preview-pre-processed-dataframe",
+    "title": "Take-home_Exercise01",
+    "section": "Preview pre-processed dataframe",
+    "text": "Preview pre-processed dataframe\nWe use the function head() to preview the first few rows of the pre-processed dataframe:\n\nhead(sgresident, 200)\n\n# A tibble: 200 × 6\n   PA         SZ                       Age Sex       Pop  Time\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;int&gt;\n 1 Ang Mo Kio Ang Mo Kio Town Centre     0 Males      10  2024\n 2 Ang Mo Kio Ang Mo Kio Town Centre     0 Females    10  2024\n 3 Ang Mo Kio Ang Mo Kio Town Centre     1 Males      10  2024\n 4 Ang Mo Kio Ang Mo Kio Town Centre     1 Females    10  2024\n 5 Ang Mo Kio Ang Mo Kio Town Centre     2 Males      10  2024\n 6 Ang Mo Kio Ang Mo Kio Town Centre     2 Females    10  2024\n 7 Ang Mo Kio Ang Mo Kio Town Centre     3 Males      10  2024\n 8 Ang Mo Kio Ang Mo Kio Town Centre     3 Females    10  2024\n 9 Ang Mo Kio Ang Mo Kio Town Centre     4 Males      30  2024\n10 Ang Mo Kio Ang Mo Kio Town Centre     4 Females    10  2024\n# ℹ 190 more rows"
   }
 ]
