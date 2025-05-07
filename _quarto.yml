@@ -45,6 +45,9 @@ website:
         menu: 
          - text: "Take-home Exercise 1"
            href: "Take-home_Exercise/Take-home_Ex01/Take-home_Exercise01.html"
+           
+         - text: "Take-home_Ex_feedback"
+           href: "Take-home_Exercise/Take-home_Ex01/Take-home_Ex_feedback.html"
     right:
      - href: index.qmd
        text: Home
