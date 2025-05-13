@@ -69,15 +69,15 @@ funnel_plot(
   group = `Sub-district`
 )
 ```
-A funnel plot object with 267 points of which 0 are outliers. 
-Plot is adjusted for overdispersion. 
 
-  - `group` in this function is different from the scatterplot. Here, it defines the level of the points to be plotted i.e. Sub-district, District or City. If Cityc is chosen, there are only six data points.
-  
-  - By default, `data_type` argument is “SR”.
-  
-  - `limit`:Plot limits, accepted values are: 95 or 99, corresponding to 95% or 99.8% quantiles of the distribution.
-  
+A funnel plot object with 267 points of which 0 are outliers. Plot is adjusted for overdispersion.
+
+-   `group` in this function is different from the scatterplot. Here, it defines the level of the points to be plotted i.e. Sub-district, District or City. If Cityc is chosen, there are only six data points.
+
+-   By default, `data_type` argument is “SR”.
+
+-   `limit`:Plot limits, accepted values are: 95 or 99, corresponding to 95% or 99.8% quantiles of the distribution.
+
 ## FunnelPlotR methods: Makeover 1
 
 ```{r}
@@ -91,6 +91,7 @@ funnel_plot(
   yrange = c(0, 0.05)   #<<
 )
 ```
+
 Things to learn from the code chunk above. + `data_type` argument is used to change from default “SR” to “PR” (i.e. proportions). + `xrange` and `yrange` are used to set the range of x-axis and y-axis
 
 ## FunnelPlotR methods: Makeover 2
@@ -110,17 +111,19 @@ funnel_plot(
   y_label = "Cumulative Fatality Rate"  #<<
 )
 ```
-  - label = NA argument is to removed the default label outliers feature.
-  
-  - title argument is used to add plot title.
-  
-  - x_label and y_label arguments are used to add/edit x-axis and y-axis titles.
-  
+
+-   label = NA argument is to removed the default label outliers feature.
+
+-   title argument is used to add plot title.
+
+-   x_label and y_label arguments are used to add/edit x-axis and y-axis titles.
+
 # Funnel Plot for Fair Visual Comparison: ggplot2 methods
 
 In this section, you will gain hands-on experience on building funnel plots step-by-step by using ggplot2. It aims to enhance you working experience of ggplot2 to customise speciallised data visualisation like funnel plot.
 
 ## Computing the basic derived fields
+
 To plot the funnel plot from scratch, we need to derive cumulative death rate and standard error of cumulative death rate.
 
 ```{r}
@@ -214,6 +217,6 @@ fp_ggplotly
 
 # References
 
-   - [Funnel Plots](https://nhs-r-community.github.io/FunnelPlotR/index.html)
-   - [Funnel Plots for Indirectly-standardised ratios](https://nhs-r-community.github.io/FunnelPlotR/articles/funnel_plots.html)
-   - [Changing funnel plot options](https://nhs-r-community.github.io/FunnelPlotR/articles/changing_funnel_plot_options.html)
+-   [Funnel Plots](https://nhs-r-community.github.io/FunnelPlotR/index.html)
+-   [Funnel Plots for Indirectly-standardised ratios](https://nhs-r-community.github.io/FunnelPlotR/articles/funnel_plots.html)
+-   [Changing funnel plot options](https://nhs-r-community.github.io/FunnelPlotR/articles/changing_funnel_plot_options.html)

@@ -161,6 +161,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html">
  <span class="dropdown-text">Hands-on Exercise 4_d</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -235,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 7, 2025</p>
+      <p class="date-modified">May 13, 2025</p>
     </div>
   </div>
     
@@ -269,13 +273,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>A half-eye + boxplot to examine age distribution patterns by region</p></li>
 </ul>
 <ol start="3" type="1">
-<li>Transform geographic data: Extracting geographic data from ‘MasterPlan2019PlanningAreaBoundaryNoSea.geojson’(Town and Regions are based on the MasterPlan 2019). This can gave better and more accurate data about Town and Regions which can prevent any mistakes from the original datasets.</li>
+<li>More concise labels in the data visualization: In the Population Pyramid Plot Visualisation, “Female/Male” is right above the graph which make the visualization more concise. There is no need to put the “gender” legend again.</li>
 </ol>
 </section>
 <section id="three-areas-for-further-improvement" class="level1">
 <h1>Three areas for further improvement:</h1>
 <ol type="1">
-<li><p>Lack of Weighted Mean Calculation Code in Population Pyramid Plot Visualisation Issue: You mention weighted means (using population count as weight) for each region but don’t show how you computed them.</p></li>
+<li><p>In this take-home exercise, it is not necessary to use geospatial method to do visualization or data-processing.</p></li>
 <li><p>Reproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.</p></li>
 <li><p>Half-eye + Box Plot Visualisation of Age vs Region needs to change to more readable version and be straightforward.</p></li>
 </ol>
@@ -288,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Plot</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggplot2, ggrepel, patchwork, </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggthemes,dplyr, xml12, sf, scales) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggthemes,dplyr, xml2, sf, scales) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sgResData24 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"respopagesex2024.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -338,13 +342,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Install required packages if not already installed</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the GeoJSON file</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>geo_data <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"MasterPlan2019PlanningAreaBoundaryNoSea.geojson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the GeoJSON file</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>geo_data <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"MasterPlan2019PlanningAreaBoundaryNoSea.geojson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `MasterPlan2019PlanningAreaBoundaryNoSea' from data source 
   `C:\xinyi-ux\ISSS608-VAA\Take-home_Exercise\Take-home_Ex01\MasterPlan2019PlanningAreaBoundaryNoSea.geojson' 
@@ -454,13 +453,11 @@ Geodetic CRS:  WGS 84</code></pre>
 # ℹ 60,414 more rows</code></pre>
 </div>
 </div>
-<ul>
-<li><a href="https://data-to-viz.com/graph/ridgeline.html">Ridgeline plot</a>&nbsp; :</li>
-</ul>
+<p><a href="https://data-to-viz.com/graph/ridgeline.html">Ridgeline plot</a>: Used to show distribution across groups.</p>
 <p><strong>stat_halfeye()</strong> is used for density plots</p>
 <p><strong>stat_summary()</strong> for showing medians</p>
 <p><strong>annotate()</strong> adds static text annotations</p>
-<p><strong>scale_()</strong> functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()</p>
+<p><strong>scale()</strong> functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()</p>
 <p><strong>coord_flip()</strong> flips the axes to change the plot orientation</p>
 <ul>
 <li><p><strong>Legend Construction (<code>p_legend</code>)</strong></p>
@@ -549,15 +546,9 @@ Continue? [y/n] </code></pre>
 </div>
 </div>
 <ul>
-<li><strong>Central Region</strong> has the <strong>oldest average age</strong>.</li>
-</ul>
-<!-- -->
-<ul>
-<li><strong>West and North-East Regions</strong> have younger populations on average.</li>
-</ul>
-<!-- -->
-<ul>
-<li>The <strong>spread</strong> (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.</li>
+<li><p><strong>Central Region</strong> has the <strong>oldest average age</strong>.</p></li>
+<li><p><strong>West and North-East Regions</strong> have younger populations on average.</p></li>
+<li><p>The <strong>spread</strong> (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.</p></li>
 </ul>
 
 

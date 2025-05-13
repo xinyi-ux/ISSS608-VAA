@@ -40,7 +40,17 @@ Key concepts and terminology related to this type of visualization:
 
 ## 4.2.1 Loading the R packages
 
-First, write a code chunk to check, install and load the following R packages: - [plotly](https://plotly.com/r/), R library for plotting interactive statistical graphs. - [gganimate](https://gganimate.com/), extends the grammar of graphics as implemented by ggplot2 to include the description of animation. - [gifski](https://cran.r-project.org/web/packages/gifski/index.html), converts video frames to GIF animations using pngquant’s fancy features for efficient cross-frame palettes and temporal dithering. It produces animated GIFs that use thousands of colors per frame. - [gapminder](https://cran.r-project.org/web/packages/gapminder/index.html), An excerpt of the data available at Gapminder.org. We just want to use its country_colors scheme. - [tidyverse](https://www.tidyverse.org/), family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
+First, write a code chunk to check, install and load the following R packages:
+
+- [plotly](https://plotly.com/r/), R library for plotting interactive statistical graphs.
+
+- [gganimate](https://gganimate.com/), extends the grammar of graphics as implemented by ggplot2 to include the description of animation.
+
+- [gifski](https://cran.r-project.org/web/packages/gifski/index.html), converts video frames to GIF animations using pngquant’s fancy features for efficient cross-frame palettes and temporal dithering. It produces animated GIFs that use thousands of colors per frame.
+
+- [gapminder](https://cran.r-project.org/web/packages/gapminder/index.html), An excerpt of the data available at Gapminder.org. We just want to use its country_colors scheme.
+
+- [tidyverse](https://www.tidyverse.org/), family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
 
 ```{r}
 pacman::p_load(readxl, gifski, gapminder,
@@ -90,13 +100,13 @@ globalPop <- read_xls("GlobalPopulation.xls",
 
 [gganimate](https://gganimate.com/) extends the grammar of graphics as implemented by ggplot2 to include the description of animation.
 
--   transition\_\*() defines how the data should be spread out and how it relates to itself across time.
+-   transition() defines how the data should be spread out and how it relates to itself across time.
 
--   view\_\*() defines how the positional scales should change along the animation.
+-   view() defines how the positional scales should change along the animation.
 
--   shadow\_\*() defines how data from other points in time should be presented in the given point in time.
+-   shadow() defines how data from other points in time should be presented in the given point in time.
 
--   enter\_*()/exit\_*() defines how new data should appear and how old data should disappear during the course of the animation.
+-   enter()/exit() defines how new data should appear and how old data should disappear during the course of the animation.
 
 -   ease_aes() defines how different aesthetics should be eased during transitions.
 

@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 5"
+title: "Hands-on_Ex05"
 author: "xu xinyi"
 format: html
 editor: visual
@@ -139,17 +139,6 @@ Two functions of tidygraph package can be used to create network objects, they a
 
 -   activate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble.
 
-```{r}
-   iris_tree <- iris_tree %>% 
-   activate(nodes) %>% 
-     # Create new column Species if a node is a leaf, and assign label to it
-   mutate(Species = ifelse(leaf, as.character(iris$Species)[label], NA)) %>% 
-   activate(edges) %>% 
-     # .N()$Species[to] refer to the node the edge is pointing to >> setosa, which will return TRUE/FALSE
-   mutate(to_setosa = .N()$Species[to] =='setosa')
-
-```
-
 -   In the above the .N() function is used to gain access to the node data while manipulating the edge data. Similarly .E() will give you the edge data and .G() will give you the tbl_graph object itself.
 
 ## Using tbl_graph() to build tidygraph data model.
@@ -246,6 +235,7 @@ g + theme_graph(background = 'grey10',
 ## Working with ggraph’s layouts
 
 ggraph support many layout for standard used, they are: star, circle, nicely (default), dh, gem, graphopt, grid, mds, spahere, randomly, fr, kk, drl and lgl. Figures below and on the right show layouts supported by **ggraph()**.
+
 ::: panel-tabset
 ## FR
 

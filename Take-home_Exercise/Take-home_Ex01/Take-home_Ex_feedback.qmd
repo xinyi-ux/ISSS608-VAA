@@ -11,7 +11,8 @@ execute:
        freeze: true
 ---
 
-# Selecting the work from: Ng Jin Yao
+# Selecting the work from
+[Ng Jin Yao](https://isss608-blessmebellburve.netlify.app/take-home_ex/take-home_ex01/take-home_ex01)
 
 # Three good design principles:
 
@@ -33,11 +34,11 @@ execute:
 
 -   A half-eye + boxplot to examine age distribution patterns by region
 
-3.  More concise labels in the data visualization: In the Population Pyramid Plot Visualisation, "Female/Male" is right above the graph which make the visualization more concise. There is no need to put the "gender" legend again. 
+3.  More concise labels in the data visualization: In the Population Pyramid Plot Visualisation, "Female/Male" is right above the graph which make the visualization more concise. There is no need to put the "gender" legend again.
 
 # Three areas for further improvement:
 
-1.  In this take-home exercise, it is not necessary to use geospatial method to do visualization or data-processing. 
+1.  In this take-home exercise, it is not necessary to use geospatial method to do visualization or data-processing.
 
 2.  Reproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.
 
@@ -51,7 +52,7 @@ execute:
 
 ```{r}
 pacman::p_load(tidyverse, ggplot2, ggrepel, patchwork, 
-               ggthemes,dplyr, xml12, sf, scales) 
+               ggthemes,dplyr, xml2, sf, scales) 
 ```
 
 ```{r}
@@ -89,11 +90,6 @@ sgResData24 <- sgResData24 %>%
 ```
 
 ```{r}
-#Install required packages if not already installed
-library(sf)
-library(xml2)
-library(dplyr)
-
 # Load the GeoJSON file
 geo_data <- st_read("MasterPlan2019PlanningAreaBoundaryNoSea.geojson")
 ```
@@ -149,9 +145,10 @@ sgResData24 <- sgResData24 %>% mutate(PA = toupper(PA)) %>%
   left_join(region_info, by = "PA")
 
 print(sgResData24)
+
 ```
 
--   [Ridgeline plot](https://data-to-viz.com/graph/ridgeline.html)  :
+[Ridgeline plot](https://data-to-viz.com/graph/ridgeline.html): Used to show distribution across groups.
 
 **stat_halfeye()** is used for density plots
 
@@ -159,7 +156,7 @@ print(sgResData24)
 
 **annotate()** adds static text annotations
 
-**scale\_()** functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()
+**scale()** functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()
 
 **coord_flip()** flips the axes to change the plot orientation
 
@@ -231,10 +228,6 @@ p
 
 -   **Central Region** has the **oldest average age**.
 
-<!-- -->
-
 -   **West and North-East Regions** have younger populations on average.
-
-<!-- -->
 
 -   The **spread** (width of intervals) is relatively similar, showing a broad mix of age groups in all regions.

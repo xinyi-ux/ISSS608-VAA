@@ -226,7 +226,9 @@ ggplot(exam,
 ```
 :::
 
-Instead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below. :::panel-tabset \### The plot
+Instead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below. 
+:::panel-tabset 
+### The plot
 
 ```{r}
 ggplot(exam,
@@ -281,6 +283,7 @@ In this section, you will learn how to create a raincloud plot to visualise the 
 First, we will plot a Half-Eye graph by using [stat_halfeye()](https://mjskay.github.io/ggdist/reference/stat_halfeye.html) of ggdist package.
 
 This produces a Half Eye visualization, which is contains a half-density and a slab-interval. 
+
 :::panel-tabset
 
 ### The plot
@@ -308,10 +311,13 @@ ggplot(exam,
 ```
 
 ::: 
+
 ## Adding the boxplot with geom_boxplot()
 
 Next, we will add the second geometry layer using geom_boxplot() of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity. 
+
 :::panel-tabset 
+
 ### The plot
 
 ```{r}

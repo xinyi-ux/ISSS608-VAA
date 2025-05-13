@@ -96,19 +96,11 @@ Notice that two steps are involved. First, an interactive version of ggplot2 geo
 
 By hovering the mouse pointer on an data point of interest, the student's ID will be displayed.
 
-```{r}
-library(png)
-
-img <- readPNG("diagram.png")
-plot(1:2, type='n')
-rasterImage(img, 1, 1, 2, 2)
-```
-
 ### 3.5.1 Displaying multiple information on tooltip
 
 The content of the tooltip can be customised by including a list object as shown in the code chunk below. Creating a new filed called tooltip and it populates text in ID and CLASS fields into newly created field.
 
-\#`c(...)`: This function in R is used to combine values into a vector.Vectors are often used as building blocks for more complex data structures like data frames, matrices, and lists in R. In this case, it’s combining the result of the`paste0()`function. #The`$` operator is used to refer to and create or access columns in a data frame :::
+`c()`: This function in R is used to combine values into a vector.Vectors are often used as building blocks for more complex data structures like data frames, matrices, and lists in R. In this case, it’s combining the result of the`paste0()`function. The`$` operator is used to refer to and create or access columns in a data frame.
 
 ```{r}
 exam_data$tooltip <- c(paste0(     
@@ -264,7 +256,7 @@ girafe(
 )                                        
 ```
 
-###3.6.6 Click effect with onclick
+### 3.6.6 Click effect with onclick
 
 `onclick` argument of ggiraph provides hotlink interactivity on the web.
 
@@ -290,7 +282,7 @@ girafe(
   height_svg = 6*0.618)             
 ```
 
-###3.6.7 Coordinated Multiple Views with ggiraph
+### 3.6.7 Coordinated Multiple Views with ggiraph
 
 Coordinated multiple views methods has been implemented in the data visualisation below.
 
