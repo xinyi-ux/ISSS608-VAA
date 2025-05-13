@@ -1,0 +1,26 @@
+/* css styles */
+
+/* Set background for entire body */
+body {
+  background-color: #FFF0F5;
+  color: #333333;
+}
+
+/* Customize navbar */
+.navbar {
+  background-color: #FFC0CB !important;  /* Hello Kitty pink */
+}
+
+/* Enlarge navbar logo */
+.navbar-brand img {
+  height: 80px !important;
+  width: auto;
+}
+
+/* Link colors */
+a {
+  color: #FF69B4;
+}
+a:hover {
+  color: #FF3B3F;
+}
