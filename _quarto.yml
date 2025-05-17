@@ -51,6 +51,13 @@ website:
            
          - text: "Take-home_Ex_feedback"
            href: "Take-home_Exercise/Take-home_Ex01/Take-home_Ex_feedback.html"
+         
+         
+      - text: "In-class Exercise"
+        menu: 
+         - text: "In-Class Exercise 05"
+           href: "In-calss Exercise/In-class_Ex05.html"      
+        
     right:
      - href: index.qmd
        text: Home

@@ -1,240 +1,51 @@
 [
   {
-    "objectID": "Take-home_Exercise/Take-home_Ex01/Take-home_Ex_feedback.html",
-    "href": "Take-home_Exercise/Take-home_Ex01/Take-home_Ex_feedback.html",
-    "title": "Take-home_Ex_feedback",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS608-VAA",
     "section": "",
-    "text": "Selecting the work from\nNg Jin Yao\n\n\nThree good design principles:\n\nClear obijective and data processing: Data wrangling ensures accuracy and relevance in your visualizations. Addtionally, from the starter, stating out the data we are going to analyze which can make more sense for later visualization.\n\n\nDuplicates using distinct()\nData types (e.g., converting Age from chr to dbl)\nNew features like Age_group and Region using mutate() and case_when()\nJoining with geographic metadata using left_join() after transforming the PA column\n\n\nVisual diversity:There are three different visualization types tailored to the data’s characteristics.\n\n\nA population pyramid to illustrate age-sex structure (a demographic standard)\nA bar chart comparing regions by population and sex composition\nA half-eye + boxplot to examine age distribution patterns by region\n\n\nMore concise labels in the data visualization: In the Population Pyramid Plot Visualisation, “Female/Male” is right above the graph which make the visualization more concise. There is no need to put the “gender” legend again.\n\n\n\nThree areas for further improvement:\n\nIn this take-home exercise, it is not necessary to use geospatial method to do visualization or data-processing.\nReproducibility and Code Commenting Issue: While your narrative is strong, some code logic is missing or only described in words. Without it, others can’t reproduce the visuals.\nHalf-eye + Box Plot Visualisation of Age vs Region needs to change to more readable version and be straightforward.\n\n\n\nMake-over version of data visualization-Half-eye + Box Plot Visualisation of Age vs Region\nRidgeline plot with inside plot and annotations: it conveys the ridgeline plot is a type of chart that displays the distribution of a numeric variable for several groups.\n\n\nPlot\n\npacman::p_load(tidyverse, ggplot2, ggrepel, patchwork, \n               ggthemes,dplyr, xml2, sf, scales) \n\n\nsgResData24 &lt;- read_csv(\"respopagesex2024.csv\")\n\n\ndistinct(sgResData24)\n\n# A tibble: 60,424 × 6\n   PA         SZ                     Age   Sex       Pop  Time\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;\n 1 Ang Mo Kio Ang Mo Kio Town Centre 0     Males      10  2024\n 2 Ang Mo Kio Ang Mo Kio Town Centre 0     Females    10  2024\n 3 Ang Mo Kio Ang Mo Kio Town Centre 1     Males      10  2024\n 4 Ang Mo Kio Ang Mo Kio Town Centre 1     Females    10  2024\n 5 Ang Mo Kio Ang Mo Kio Town Centre 2     Males      10  2024\n 6 Ang Mo Kio Ang Mo Kio Town Centre 2     Females    10  2024\n 7 Ang Mo Kio Ang Mo Kio Town Centre 3     Males      10  2024\n 8 Ang Mo Kio Ang Mo Kio Town Centre 3     Females    10  2024\n 9 Ang Mo Kio Ang Mo Kio Town Centre 4     Males      30  2024\n10 Ang Mo Kio Ang Mo Kio Town Centre 4     Females    10  2024\n# ℹ 60,414 more rows\n\n\n\nsgResData24 &lt;- sgResData24 %&gt;%\n  mutate(\n    # Convert age to numeric, handle \"90_and_Over\"\n    Age_num = case_when(\n      Age == \"90_and_Over\" ~ 90,\n      TRUE ~ suppressWarnings(as.numeric(Age))  # Avoid warnings from \"90_and_Over\"\n    ),\n    \n    # Group into age bands\n    Age_group = case_when(\n      Age_num &gt;= 0 & Age_num &lt;= 9   ~ \"0-9\",\n      Age_num &gt;= 10 & Age_num &lt;= 19 ~ \"10-19\",\n      Age_num &gt;= 20 & Age_num &lt;= 29 ~ \"20-29\",\n      Age_num &gt;= 30 & Age_num &lt;= 39 ~ \"30-39\",\n      Age_num &gt;= 40 & Age_num &lt;= 49 ~ \"40-49\",\n      Age_num &gt;= 50 & Age_num &lt;= 59 ~ \"50-59\",\n      Age_num &gt;= 60 & Age_num &lt;= 69 ~ \"60-69\",\n      Age_num &gt;= 70 & Age_num &lt;= 79 ~ \"70-79\",\n      Age_num &gt;= 80 & Age_num &lt;= 89 ~ \"80-89\",\n      Age_num &gt;= 90                ~ \"90+\",\n      TRUE                         ~ NA_character_\n    )\n  )\n\n\n# Load the GeoJSON file\ngeo_data &lt;- st_read(\"MasterPlan2019PlanningAreaBoundaryNoSea.geojson\")\n\nReading layer `MasterPlan2019PlanningAreaBoundaryNoSea' from data source \n  `C:\\xinyi-ux\\ISSS608-VAA\\Take-home_Exercise\\Take-home_Ex01\\MasterPlan2019PlanningAreaBoundaryNoSea.geojson' \n  using driver `GeoJSON'\nSimple feature collection with 55 features and 2 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775\nGeodetic CRS:  WGS 84\n\n\n\n# Function to parse HTML and extract PLN_AREA_N and REGION_N\nextract_info &lt;- function(html_str) {\n  doc &lt;- read_html(html_str)\n  rows &lt;- xml_find_all(doc, \".//tr\")\n\n  # Loop through rows and extract key-value pairs\n  data &lt;- lapply(rows, function(row) {\n    th &lt;- xml_text(xml_find_first(row, \".//th\"))\n    td &lt;- xml_text(xml_find_first(row, \".//td\"))\n    if (!is.na(th) && !is.na(td)) {\n      return(setNames(list(td), th))\n    } else {\n      return(NULL)\n    }\n  })\n\n  # Combine and extract specific fields\n  info &lt;- do.call(c, data)\n  list(\n    Town = info[[\"PLN_AREA_N\"]],\n    Region = info[[\"REGION_N\"]]\n  )\n}\n\n\n# Apply the extraction function to each row\ninfo_list &lt;- lapply(geo_data$Description, extract_info)\n\n# Combine results into a data frame\ninfo_df &lt;- bind_rows(info_list) %&gt;% distinct() %&gt;% arrange(Region, Town)\n\n# View result\nprint(info_df)\n\n# A tibble: 55 × 2\n   Town          Region        \n   &lt;chr&gt;         &lt;chr&gt;         \n 1 BISHAN        CENTRAL REGION\n 2 BUKIT MERAH   CENTRAL REGION\n 3 BUKIT TIMAH   CENTRAL REGION\n 4 DOWNTOWN CORE CENTRAL REGION\n 5 GEYLANG       CENTRAL REGION\n 6 KALLANG       CENTRAL REGION\n 7 MARINA EAST   CENTRAL REGION\n 8 MARINA SOUTH  CENTRAL REGION\n 9 MARINE PARADE CENTRAL REGION\n10 MUSEUM        CENTRAL REGION\n# ℹ 45 more rows\n\n\n\nsgResData24 %&gt;% mutate(PA = toupper(PA))\n\n# A tibble: 60,424 × 8\n   PA         SZ                     Age   Sex       Pop  Time Age_num Age_group\n   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    \n 1 ANG MO KIO Ang Mo Kio Town Centre 0     Males      10  2024       0 0-9      \n 2 ANG MO KIO Ang Mo Kio Town Centre 0     Females    10  2024       0 0-9      \n 3 ANG MO KIO Ang Mo Kio Town Centre 1     Males      10  2024       1 0-9      \n 4 ANG MO KIO Ang Mo Kio Town Centre 1     Females    10  2024       1 0-9      \n 5 ANG MO KIO Ang Mo Kio Town Centre 2     Males      10  2024       2 0-9      \n 6 ANG MO KIO Ang Mo Kio Town Centre 2     Females    10  2024       2 0-9      \n 7 ANG MO KIO Ang Mo Kio Town Centre 3     Males      10  2024       3 0-9      \n 8 ANG MO KIO Ang Mo Kio Town Centre 3     Females    10  2024       3 0-9      \n 9 ANG MO KIO Ang Mo Kio Town Centre 4     Males      30  2024       4 0-9      \n10 ANG MO KIO Ang Mo Kio Town Centre 4     Females    10  2024       4 0-9      \n# ℹ 60,414 more rows\n\n\n\nlibrary(dplyr)\n\n# Rename Town to PA in the region info dataframe\nregion_info &lt;- info_df %&gt;% rename(PA = Town)\n\n# left join sgResData24 with region_info to get Region column\nsgResData24 &lt;- sgResData24 %&gt;% mutate(PA = toupper(PA)) %&gt;%\n  left_join(region_info, by = \"PA\")\n\nprint(sgResData24)\n\n# A tibble: 60,424 × 9\n   PA         SZ                Age   Sex     Pop  Time Age_num Age_group Region\n   &lt;chr&gt;      &lt;chr&gt;             &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; \n 1 ANG MO KIO Ang Mo Kio Town … 0     Males    10  2024       0 0-9       NORTH…\n 2 ANG MO KIO Ang Mo Kio Town … 0     Fema…    10  2024       0 0-9       NORTH…\n 3 ANG MO KIO Ang Mo Kio Town … 1     Males    10  2024       1 0-9       NORTH…\n 4 ANG MO KIO Ang Mo Kio Town … 1     Fema…    10  2024       1 0-9       NORTH…\n 5 ANG MO KIO Ang Mo Kio Town … 2     Males    10  2024       2 0-9       NORTH…\n 6 ANG MO KIO Ang Mo Kio Town … 2     Fema…    10  2024       2 0-9       NORTH…\n 7 ANG MO KIO Ang Mo Kio Town … 3     Males    10  2024       3 0-9       NORTH…\n 8 ANG MO KIO Ang Mo Kio Town … 3     Fema…    10  2024       3 0-9       NORTH…\n 9 ANG MO KIO Ang Mo Kio Town … 4     Males    30  2024       4 0-9       NORTH…\n10 ANG MO KIO Ang Mo Kio Town … 4     Fema…    10  2024       4 0-9       NORTH…\n# ℹ 60,414 more rows\n\n\nRidgeline plot: Used to show distribution across groups.\nstat_halfeye() is used for density plots\nstat_summary() for showing medians\nannotate() adds static text annotations\nscale() functions customize scales and colors, including a manual color scale using MetBrewer::met.brewer()\ncoord_flip() flips the axes to change the plot orientation\n\nLegend Construction (p_legend)\n\nWe use a subset of data (rent_title_words) filtered for the word beautiful\nAnd geom_curve to draw arrows pointing to specific elements\n\nInserting the Legend into the Main Plot\n\nThe inset_element function combines the main plot (p) and the legend (p_legend) by embedding the legend within the main plot’s space\n\n\n\nglimpse(sgResData24)\n\nRows: 60,424\nColumns: 9\n$ PA        &lt;chr&gt; \"ANG MO KIO\", \"ANG MO KIO\", \"ANG MO KIO\", \"ANG MO KIO\", \"ANG…\n$ SZ        &lt;chr&gt; \"Ang Mo Kio Town Centre\", \"Ang Mo Kio Town Centre\", \"Ang Mo …\n$ Age       &lt;chr&gt; \"0\", \"0\", \"1\", \"1\", \"2\", \"2\", \"3\", \"3\", \"4\", \"4\", \"5\", \"5\", …\n$ Sex       &lt;chr&gt; \"Males\", \"Females\", \"Males\", \"Females\", \"Males\", \"Females\", …\n$ Pop       &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 30, 10, 20, 10, 20, 30, 30, …\n$ Time      &lt;dbl&gt; 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, …\n$ Age_num   &lt;dbl&gt; 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, …\n$ Age_group &lt;chr&gt; \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9\", \"0-9…\n$ Region    &lt;chr&gt; \"NORTH-EAST REGION\", \"NORTH-EAST REGION\", \"NORTH-EAST REGION…\n\n\n\nlibrary(ggdist)\nlibrary(ggtext)\nlibrary(extrafont) \nfont_import()\n\nImporting fonts may take a few minutes, depending on the number of fonts and the speed of the system.\nContinue? [y/n] \n\n# Compute weighted mean for each region\nmean_age &lt;- sgResData24 %&gt;%\n  group_by(Region) %&gt;%\n  summarise(weighted_mean = weighted.mean(Age_num, Pop, na.rm = TRUE))\n\n# Theme and background setup\nbg_color &lt;- \"grey97\"\nfont_family &lt;- \"Fira Sans\"\n\nplot_subtitle &lt;- glue::glue(\"Age distribution by Singapore regions in 2024.\\nRed diamonds show the population-weighted mean age.\")\n\n# Main plot\np &lt;- ggplot(sgResData24, aes(x = Region, y = Age_num, weight = Pop)) +\n  stat_halfeye(fill_type = \"segments\", alpha = 0.3) +\n  stat_interval() +\n  stat_summary(geom = \"point\", fun = median, color = \"black\") +\n  geom_point(data = mean_age, aes(x = Region, y = weighted_mean), \n             color = \"red\", size = 3, shape = 18, inherit.aes = FALSE) +\n  scale_x_discrete(labels = stringr::str_to_title) +\n  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 10)) +\n  coord_flip() +\n  labs(\n    title = toupper(\"AGE DISTRIBUTION BY REGION\"),\n    subtitle = plot_subtitle,\n    caption = \"Data: Singapore Department of Statistics, 2024\",\n    x = NULL,\n    y = \"Age\"\n  ) +\n  theme_minimal(base_family = font_family) +\n  theme(\n    plot.background = element_rect(color = NA, fill = bg_color),\n    panel.grid = element_blank(),\n    panel.grid.major.x = element_line(linewidth = 0.1, color = \"grey75\"),\n    plot.title = element_text(family = \"Serif\"),\n    plot.subtitle = ggtext::element_textbox_simple(margin = margin(t = 4, b = 16), size = 10),\n    plot.caption = ggtext::element_textbox_simple(margin = margin(t = 12), size = 8),\n    axis.text.y = element_text(hjust = 0, margin = margin(r = -10), family = \"Serif\"),\n    plot.margin = margin(4, 4, 4, 4)\n  )\n\n\np\n\n\n\n\n\n\n\n\n\nCentral Region has the oldest average age.\nWest and North-East Regions have younger populations on average.\nThe spread (width of intervals) is relatively similar, showing a broad mix of age groups in all regions."
+    "text": "Welcome to ISSS608 VIsual Analytics and Appllications. In the website, you will find my coursework prepared for this course."
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html",
-    "title": "Hands-on_Ex05",
+    "objectID": "In-calss Exercise/In-class_Ex05.html",
+    "href": "In-calss Exercise/In-class_Ex05.html",
+    "title": "In-class Exercise 05",
     "section": "",
-    "text": "By the end of this hands-on exercise, you will be able to:\n\ncreate graph object data frames, manipulate them using appropriate functions of dplyr, lubridate, and tidygraph\nbuild network graph visualisation using appropriate functions of ggraph\ncompute network geometrics using tidygraph\nbuild advanced graph visualisation by incorporating the network geometrics\nbuild interactive network visualisation using visNetwork package"
+    "text": "pacman::p_load(tidyverse, jsonlite, SmartEDA, tidygraph, ggraph)"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#installing-and-launching-r-packages",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#installing-and-launching-r-packages",
-    "title": "Hands-on_Ex05",
-    "section": "Installing and launching R packages",
-    "text": "Installing and launching R packages\nThe code chunk:\n\npacman::p_load(igraph, tidygraph, ggraph, \n               visNetwork, lubridate, clock,\n               tidyverse, graphlayouts, \n               concaveman, ggforce)"
+    "objectID": "In-calss Exercise/In-class_Ex05.html#inspect-structure",
+    "href": "In-calss Exercise/In-class_Ex05.html#inspect-structure",
+    "title": "In-class Exercise 05",
+    "section": "Inspect Structure",
+    "text": "Inspect Structure\n\nstr(kg,max.level=1)\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     :List of 2\n $ nodes     :'data.frame': 17412 obs. of  10 variables:\n $ links     :'data.frame': 37857 obs. of  4 variables:"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#import-data",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#import-data",
-    "title": "Hands-on_Ex05",
-    "section": "Import Data",
-    "text": "Import Data\nIn this step, you will import GAStech_email_node.csv and GAStech_email_edges-v2.csv into RStudio environment by using read_csv() of readr package.\n\nGAStech_nodes &lt;- read_csv(\"GAStech_email_node.csv\")\nGAStech_edges &lt;- read_csv(\"GAStech_email_edge-v2.csv\")"
+    "objectID": "In-calss Exercise/In-class_Ex05.html#extract-and-inspect",
+    "href": "In-calss Exercise/In-class_Ex05.html#extract-and-inspect",
+    "title": "In-class Exercise 05",
+    "section": "Extract and Inspect",
+    "text": "Extract and Inspect\n\nnodes_tb1 &lt;- as_tibble(kg$nodes)\nedges_tb1 &lt;- as_tibble(kg$links)"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-imported-data",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-imported-data",
-    "title": "Hands-on_Ex05",
-    "section": "Reviewing the imported data",
-    "text": "Reviewing the imported data\n\nglimpse(GAStech_edges)\n\nRows: 9,063\nColumns: 8\n$ source      &lt;dbl&gt; 43, 43, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 26, 26, 26…\n$ target      &lt;dbl&gt; 41, 40, 51, 52, 53, 45, 44, 46, 48, 49, 47, 54, 27, 28, 29…\n$ SentDate    &lt;chr&gt; \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\", \"6/1/2014\"…\n$ SentTime    &lt;time&gt; 08:39:00, 08:39:00, 08:58:00, 08:58:00, 08:58:00, 08:58:0…\n$ Subject     &lt;chr&gt; \"GT-SeismicProcessorPro Bug Report\", \"GT-SeismicProcessorP…\n$ MainSubject &lt;chr&gt; \"Work related\", \"Work related\", \"Work related\", \"Work rela…\n$ sourceLabel &lt;chr&gt; \"Sven.Flecha\", \"Sven.Flecha\", \"Kanon.Herrero\", \"Kanon.Herr…\n$ targetLabel &lt;chr&gt; \"Isak.Baza\", \"Lucas.Alcazar\", \"Felix.Resumir\", \"Hideki.Coc…"
+    "objectID": "In-calss Exercise/In-class_Ex05.html#initial-eda",
+    "href": "In-calss Exercise/In-class_Ex05.html#initial-eda",
+    "title": "In-class Exercise 05",
+    "section": "Initial EDA",
+    "text": "Initial EDA\n\nggplot(data = edges_tb1,\n       aes(y =`Edge Type`)) +\n     geom_bar()\n\n\n\n\n\n\n\n\n\nggplot(data = nodes_tb1,\n       aes(y =`Node Type`)) +\n     geom_bar()"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-time",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-time",
-    "title": "Hands-on_Ex05",
-    "section": "Wrangling time",
-    "text": "Wrangling time\nThe code chunk below will be used to perform the changes:\n\ndmy() transforms the SentDate to Date data type.\nwday() returns the day of the week as a decimal number by default\n\nlabel=TRUE: returns the character version of the ordered labels instead of numbers\nabbr=TRUE: returns the abbreviated label (e.g., MON, TUE)\n\nthe values in the Weekday field are in ordinal scale.\n\n\nGAStech_edges &lt;- GAStech_edges %&gt;%\n  mutate(SendDate = dmy(SentDate)) %&gt;%\n  mutate(Weekday = wday(SentDate,\n                        label = TRUE,\n                        abbr = FALSE))"
+    "objectID": "In-calss Exercise/In-class_Ex05.html#creating-knowledge-graph",
+    "href": "In-calss Exercise/In-class_Ex05.html#creating-knowledge-graph",
+    "title": "In-class Exercise 05",
+    "section": "Creating Knowledge Graph",
+    "text": "Creating Knowledge Graph\nThis is\n\nStep 1: Mapping from node id to row index\n\nid_map&lt;- tibble(id= nodes_tb1$id,\n                index = seq_len(\n                  nrow(nodes_tb1)))\n\nThis ensures each d from your node list is mapped to the correct row number.\n\n\nStep 2 : Map source and target IDs to row indices\n\nedges_tb1&lt;- edges_tb1 %&gt;%\n  left_join(id_map,by = c(\"source\"=\"id\"))%&gt;%\n  rename(from= index)%&gt;%\n  left_join(id_map,by = c(\"target\" =  \"id\"))%&gt;%\n  rename(to = index)\n\n\n\nStep3: Filter out any unmatched(invalid) edges\n\nedges_tb1 = edges_tb1 %&gt;%\n  filter(!is.na(from),!is.na(to))\n\n\n\nStep 4: creating the graph\nLastly,tbl_grph() is used to create tidygraph’s graph object by using the code chunk below.\n\ngraph = tbl_graph(nodes = nodes_tb1,\n                  edges = edges_tb1,\n                  directed = TRUE)"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-date-fields",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-revised-date-fields",
-    "title": "Hands-on_Ex05",
-    "section": "Reviewing the revised date fields",
-    "text": "Reviewing the revised date fields\nTable below shows the data structure of the reformatted GAStech_edges data frame\n\nstr(GAStech_edges)\n\ntibble [9,063 × 10] (S3: tbl_df/tbl/data.frame)\n $ source     : num [1:9063] 43 43 44 44 44 44 44 44 44 44 ...\n $ target     : num [1:9063] 41 40 51 52 53 45 44 46 48 49 ...\n $ SentDate   : chr [1:9063] \"6/1/2014\" \"6/1/2014\" \"6/1/2014\" \"6/1/2014\" ...\n $ SentTime   : 'hms' num [1:9063] 08:39:00 08:39:00 08:58:00 08:58:00 ...\n  ..- attr(*, \"units\")= chr \"secs\"\n $ Subject    : chr [1:9063] \"GT-SeismicProcessorPro Bug Report\" \"GT-SeismicProcessorPro Bug Report\" \"Inspection request for site\" \"Inspection request for site\" ...\n $ MainSubject: chr [1:9063] \"Work related\" \"Work related\" \"Work related\" \"Work related\" ...\n $ sourceLabel: chr [1:9063] \"Sven.Flecha\" \"Sven.Flecha\" \"Kanon.Herrero\" \"Kanon.Herrero\" ...\n $ targetLabel: chr [1:9063] \"Isak.Baza\" \"Lucas.Alcazar\" \"Felix.Resumir\" \"Hideki.Cocinaro\" ...\n $ SendDate   : Date[1:9063], format: \"2014-01-06\" \"2014-01-06\" ...\n $ Weekday    : Ord.factor w/ 7 levels \"Sunday\"&lt;\"Monday\"&lt;..: 6 6 6 6 6 6 6 6 6 6 ..."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-attributes",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#wrangling-attributes",
-    "title": "Hands-on_Ex05",
-    "section": "Wrangling attributes",
-    "text": "Wrangling attributes\nA close examination of GAStech_edges data.frame reveals that it consists of individual e-mail flow records. This is not very useful for visualisation.\nIn view of this, we will aggregate the individual by date, senders, receivers, main subject and day of the week.\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(source, target, Weekday) %&gt;%\n    summarise(Weight = n(),.groups = \"drop\") %&gt;% # count occurrences as Weight\n  filter(source!=target) %&gt;% # remove emails where the sender and receiver are the same person\n  filter(Weight &gt; 1) %&gt;%\n  ungroup()\n\n\nfour functions from dplyr package are used. They are: filter(), group(), summarise(), and ungroup().\nThe output data.frame is called GAStech_edges_aggregated.\nA new field called Weight has been added in GAStech_edges_aggregated."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-tbl_graph-object",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-tbl_graph-object",
-    "title": "Hands-on_Ex05",
-    "section": "The tbl_graph object",
-    "text": "The tbl_graph object\nTwo functions of tidygraph package can be used to create network objects, they are:\n\ntbl_graph():creates a tbl_graph network object from nodes and edges data.\nas_tbl_graph():converts network data and objects to a tbl_graph network. Below are network data and objects supported by as_tbl_graph()\n\na node data.frame and an edge data.frame\ndata.frame, list, matrix from base\nigraph from igraph\nnetwork from network\ndendrogram and hclust from stats\nNode from data.tree\nphylo and evonet from ape\ngraphNEL, graphAM, graphBAM from graph (in Bioconductor)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-dplyr-verbs-in-tidygraph",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#the-dplyr-verbs-in-tidygraph",
-    "title": "Hands-on_Ex05",
-    "section": "The dplyr verbs in tidygraph",
-    "text": "The dplyr verbs in tidygraph\n\nactivate() verb from tidygraph serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to tbl_graph object are applied to the active tibble.\nIn the above the .N() function is used to gain access to the node data while manipulating the edge data. Similarly .E() will give you the edge data and .G() will give you the tbl_graph object itself."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#using-tbl_graph-to-build-tidygraph-data-model.",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#using-tbl_graph-to-build-tidygraph-data-model.",
-    "title": "Hands-on_Ex05",
-    "section": "Using tbl_graph() to build tidygraph data model.",
-    "text": "Using tbl_graph() to build tidygraph data model.\nIn this section, you will use tbl_graph() of tinygraph package to build an tidygraph’s network graph data.frame.\nBefore typing the codes, you are recommended to review to reference guide of tbl_graph()\n\nGAStech_graph &lt;- tbl_graph(nodes = GAStech_nodes,\n                           edges = GAStech_edges_aggregated, \n                           directed = TRUE)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object",
-    "title": "Hands-on_Ex05",
-    "section": "Reviewing the output tidygraph’s graph object",
-    "text": "Reviewing the output tidygraph’s graph object\n\nGAStech_graph\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Node Data: 54 × 4 (active)\n      id label               Department     Title                               \n   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;                               \n 1     1 Mat.Bramar          Administration Assistant to CEO                    \n 2     2 Anda.Ribera         Administration Assistant to CFO                    \n 3     3 Rachel.Pantanal     Administration Assistant to CIO                    \n 4     4 Linda.Lagos         Administration Assistant to COO                    \n 5     5 Ruscella.Mies.Haber Administration Assistant to Engineering Group Mana…\n 6     6 Carla.Forluniau     Administration Assistant to IT Group Manager       \n 7     7 Cornelia.Lais       Administration Assistant to Security Group Manager \n 8    44 Kanon.Herrero       Security       Badging Office                      \n 9    45 Varja.Lagos         Security       Badging Office                      \n10    46 Stenig.Fusil        Security       Building Control                    \n# ℹ 44 more rows\n#\n# Edge Data: 1,372 × 4\n   from    to Weekday Weight\n  &lt;int&gt; &lt;int&gt; &lt;ord&gt;    &lt;int&gt;\n1     1     2 Sunday       5\n2     1     2 Monday       2\n3     1     2 Tuesday      3\n# ℹ 1,369 more rows"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object-1",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#reviewing-the-output-tidygraphs-graph-object-1",
-    "title": "Hands-on_Ex05",
-    "section": "Reviewing the output tidygraph’s graph object",
-    "text": "Reviewing the output tidygraph’s graph object\n\nThe output above reveals that GAStech_graph is a tbl_graph object with 54 nodes and 4541 edges.\nThe command also prints the first six rows of “Node Data” and the first three of “Edge Data”.\nIt states that the Node Data is active. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-active-object",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-active-object",
-    "title": "Hands-on_Ex05",
-    "section": "Changing the active object",
-    "text": "Changing the active object\nThe nodes tibble data frame is activated by default, but you can change which tibble data frame is active with the activate() function. Thus, if we wanted to rearrange the rows in the edges tibble to list those with the highest “weight” first, we could use activate() and then arrange().\n\nGAStech_graph %&gt;%\n  activate(edges) %&gt;%\n  arrange(desc(Weight))\n\n# A tbl_graph: 54 nodes and 1372 edges\n#\n# A directed multigraph with 1 component\n#\n# Edge Data: 1,372 × 4 (active)\n    from    to Weekday   Weight\n   &lt;int&gt; &lt;int&gt; &lt;ord&gt;      &lt;int&gt;\n 1    40    41 Saturday      13\n 2    41    43 Monday        11\n 3    35    31 Tuesday       10\n 4    40    41 Monday        10\n 5    40    43 Monday        10\n 6    36    32 Sunday         9\n 7    40    43 Saturday       9\n 8    41    40 Monday         9\n 9    19    15 Wednesday      8\n10    35    38 Tuesday        8\n# ℹ 1,362 more rows\n#\n# Node Data: 54 × 4\n     id label           Department     Title           \n  &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;           \n1     1 Mat.Bramar      Administration Assistant to CEO\n2     2 Anda.Ribera     Administration Assistant to CFO\n3     3 Rachel.Pantanal Administration Assistant to CIO\n# ℹ 51 more rows"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-a-basic-network-graph",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-a-basic-network-graph",
-    "title": "Hands-on_Ex05",
-    "section": "Plotting a basic network graph",
-    "text": "Plotting a basic network graph\nFor a comprehensive discussion of each of this aspect of graph, please refer to their respective vignettes provided.\nThe code chunk below uses ggraph(), geom-edge_link() and geom_node_point() to plot a network graph by using GAStech_graph. Before your get started, it is advisable to read their respective reference guide at least once.\n\nggraph(GAStech_graph) +\n  geom_edge_link() +\n  geom_node_point()\n\n\n\n\n\n\n\n\nThe basic plotting function is ggraph(), which takes the data to be used for the graph and the type of layout desired. Both of the arguments for ggraph() are built around igraph. Therefore, ggraph() can use either an igraph object or a tbl_graph object."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-default-network-graph-theme",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-default-network-graph-theme",
-    "title": "Hands-on_Ex05",
-    "section": "Changing the default network graph theme",
-    "text": "Changing the default network graph theme\nIn this section, you will use theme_graph() to remove the x and y axes. Before your get started, it is advisable to read it’s reference guide at least once.\n\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()\n\n\n\n\n\n\n\n\nThings to learn from the code chunk above:\n\nggraph introduces a special ggplot theme that provides better defaults for network graphs than the normal ggplot defaults. theme_graph(), besides removing axes, grids, and border, changes the font to Arial Narrow (this can be overridden).\nThe ggraph theme can be set for a series of plots with the set_graph_style() command run before the graphs are plotted or by using theme_graph() in the individual plots."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-coloring-of-the-plot",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#changing-the-coloring-of-the-plot",
-    "title": "Hands-on_Ex05",
-    "section": "Changing the coloring of the plot",
-    "text": "Changing the coloring of the plot\ntheme_graph() makes it easy to change the coloring of the plot.\n\ng &lt;- ggraph(GAStech_graph) + \n  geom_edge_link(aes(colour = 'grey50')) +\n  geom_node_point(aes(colour = 'grey40'))\n\ng + theme_graph(background = 'grey10',\n                text_colour = 'white')"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-ggraphs-layouts",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-ggraphs-layouts",
-    "title": "Hands-on_Ex05",
-    "section": "Working with ggraph’s layouts",
-    "text": "Working with ggraph’s layouts\nggraph support many layout for standard used, they are: star, circle, nicely (default), dh, gem, graphopt, grid, mds, spahere, randomly, fr, kk, drl and lgl. Figures below and on the right show layouts supported by ggraph().\n\nFRstarspherelglnicely\n\n\nFruchterman and Reingold layout:\n\ng &lt;- ggraph(GAStech_graph,layout = \"fr\") + \n  geom_edge_link(colour = \"grey80\") +   # Edge color\n  geom_node_point(colour=\"#8087CA\") +   # Node color\n  geom_node_text(colour = \"black\",\n                 fontface = \"bold\",\n                 size = 2,\n                 repel = TRUE,\n                 aes(label = label))  # Node labels\n\ng + \n  theme_graph() +\n  labs(title = \"Email Network Analysis\") +\n  theme(\n    text = element_text(family = \"Arial\", face = \"plain\", size = 11, color = \"black\"),\n    plot.title = element_text(hjust = 0.5), \n    legend.position = \"none\",  \n    legend.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    legend.key.size = unit(0.2, \"cm\"),\n    legend.title = element_text(size = 9),\n    legend.text = element_text(size = 8),\n    panel.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    plot.background = element_rect(fill = \"#f3f1e9\", color = NA) \n  )\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,layout = \"star\") + \n  geom_edge_link(colour = \"grey80\") +   # Edge color\n  geom_node_point(colour=\"#8087CA\") +   # Node color\n  geom_node_text(colour = \"black\",\n                 fontface = \"bold\",\n                 size = 2,\n                 repel = TRUE,\n                 aes(label = label))  # Node labels\n\ng + \n  theme_graph() +\n  labs(title = \"Email Network Analysis\") +\n  theme(\n    text = element_text(family = \"Arial\", face = \"plain\", size = 11, color = \"black\"),\n    plot.title = element_text(hjust = 0.5), \n    legend.position = \"none\",  \n    legend.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    legend.key.size = unit(0.2, \"cm\"),\n    legend.title = element_text(size = 9),\n    legend.text = element_text(size = 8),\n    panel.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    plot.background = element_rect(fill = \"#f3f1e9\", color = NA) \n  )\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,layout = \"sphere\") + \n  geom_edge_link(colour = \"grey80\") +   # Edge color\n  geom_node_point(colour=\"#8087CA\") +   # Node color\n  geom_node_text(colour = \"black\",\n                 fontface = \"bold\",\n                 size = 2,\n                 repel = TRUE,\n                 aes(label = label))  # Node labels\n\ng + \n  theme_graph() +\n  labs(title = \"Email Network Analysis\") +\n  theme(\n    text = element_text(family = \"Arial\", face = \"plain\", size = 11, color = \"black\"),\n    plot.title = element_text(hjust = 0.5), \n    legend.position = \"none\",  \n    legend.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    legend.key.size = unit(0.2, \"cm\"),\n    legend.title = element_text(size = 9),\n    legend.text = element_text(size = 8),\n    panel.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    plot.background = element_rect(fill = \"#f3f1e9\", color = NA) \n  )\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,layout = \"lgl\") + \n  geom_edge_link(colour = \"grey80\") +   # Edge color\n  geom_node_point(colour=\"#8087CA\") +   # Node color\n  geom_node_text(colour = \"black\",\n                 fontface = \"bold\",\n                 size = 2,\n                 repel = TRUE,\n                 aes(label = label))  # Node labels\n\ng + \n  theme_graph() +\n  labs(title = \"Email Network Analysis\") +\n  theme(\n    text = element_text(family = \"Arial\", face = \"plain\", size = 11, color = \"black\"),\n    plot.title = element_text(hjust = 0.5), \n    legend.position = \"none\",  \n    legend.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    legend.key.size = unit(0.2, \"cm\"),\n    legend.title = element_text(size = 9),\n    legend.text = element_text(size = 8),\n    panel.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    plot.background = element_rect(fill = \"#f3f1e9\", color = NA) \n  )\n\n\n\n\n\n\n\n\n\n\n\ng &lt;- ggraph(GAStech_graph,layout = \"nicely\") + \n  geom_edge_link(colour = \"grey80\") +   # Edge color\n  geom_node_point(colour=\"#8087CA\") +   # Node color\n  geom_node_text(colour = \"black\",\n                 fontface = \"bold\",\n                 size = 2,\n                 repel = TRUE,\n                 aes(label = label))  # Node labels\n\ng + \n  theme_graph() +\n  labs(title = \"Email Network Analysis\") +\n  theme(\n    text = element_text(family = \"Arial\", face = \"plain\", size = 11, color = \"black\"),\n    plot.title = element_text(hjust = 0.5), \n    legend.position = \"none\",  \n    legend.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    legend.key.size = unit(0.2, \"cm\"),\n    legend.title = element_text(size = 9),\n    legend.text = element_text(size = 8),\n    panel.background = element_rect(fill = \"#f3f1e9\", color = NA),\n    plot.background = element_rect(fill = \"#f3f1e9\", color = NA) \n  )"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#fruchterman-and-reingold-layout",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#fruchterman-and-reingold-layout",
-    "title": "Hands-on_Ex05",
-    "section": "Fruchterman and Reingold layout",
-    "text": "Fruchterman and Reingold layout\nThe code chunks below will be used to plot the network graph using Fruchterman and Reingold layout.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"fr\") +\n  geom_edge_link(aes()) +\n  geom_node_point(aes())\n\ng + theme_graph()\n\n\n\n\n\n\n\n\nThing to learn from the code chunk above:\nlayout argument is used to define the layout to be used."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-network-nodes",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-network-nodes",
-    "title": "Hands-on_Ex05",
-    "section": "Modifying network nodes",
-    "text": "Modifying network nodes\nIn this section, you will colour each node by referring to their respective departments.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes()) +\n  geom_node_point(aes(colour = Department, \n                      size = 3))\n\ng + theme_graph()\n\n\n\n\n\n\n\n\nThings to learn from the code chunks above:\n\ngeom_node_point is equivalent in functionality to geo_point of ggplot2. It allows for simple plotting of nodes in different shapes, colours and sizes. In the codes chnuks above colour and size are used."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-edges",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#modifying-edges",
-    "title": "Hands-on_Ex05",
-    "section": "Modifying edges",
-    "text": "Modifying edges\nIn the code chunk below, the thickness of the edges will be mapped with the Weight variable.\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") +\n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 3)\n\ng + theme_graph()\n\n\n\n\n\n\n\n\nThings to learn from the code chunks above:\n\ngeom_edge_link draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that. In the example above, argument width is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges",
-    "title": "Hands-on_Ex05",
-    "section": "Working with facet_edges()",
-    "text": "Working with facet_edges()\nIn the code chunk below, facet_edges() is used. Before getting started, it is advisable for you to read it’s reference guide at least once.\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n\ng + facet_edges(~Weekday)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-1",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_edges-1",
-    "title": "Hands-on_Ex05",
-    "section": "Working with facet_edges()",
-    "text": "Working with facet_edges()\nThe code chunk below uses theme() to change the position of the legend.\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2) +\n  theme(legend.position = 'bottom')\n  \ng + facet_edges(~Weekday)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#a-framed-facet-graph",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#a-framed-facet-graph",
-    "title": "Hands-on_Ex05",
-    "section": "A framed facet graph",
-    "text": "A framed facet graph\nThe code chunk below adds frame to each graph. th_foreground helper is provided, when there is a need to add a foreground color to a plot that is already using theme_graph.\n\nset_graph_style() \n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_edges(~Weekday) +\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_nodes",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-facet_nodes",
-    "title": "Hands-on_Ex05",
-    "section": "Working with facet_nodes()",
-    "text": "Working with facet_nodes()\nIn the code chunkc below, facet_nodes is used. Before getting started, it is advisable for you to read it’s reference guide at least once. By default, the labels are displayed on the top of the plot. Using strip.position, it is possible to place the labels on either of the four sides by setting strip.position = c(\"top\", \"bottom\", \"left\", \"right\").\n\nset_graph_style()\n\ng &lt;- ggraph(GAStech_graph, \n            layout = \"nicely\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department), \n                  size = 2)\n  \ng + facet_nodes(~Department)+\n  th_foreground(foreground = \"grey80\",  \n                border = TRUE) +\n  theme(legend.position = 'bottom')"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#computing-centrality-indices",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#computing-centrality-indices",
-    "title": "Hands-on_Ex05",
-    "section": "Computing centrality indices",
-    "text": "Computing centrality indices\nCentrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector.\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(betweenness_centrality = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department,\n            size=betweenness_centrality))\ng + theme_graph()\n\n\n\n\n\n\n\n\nThings to learn from the code chunk above:\nmutate() of dplyr is used to perform the computation. the algorithm used, on the other hand, is the centrality_betweenness() of tidygraph."
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-network-metrics",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-network-metrics",
-    "title": "Hands-on_Ex05",
-    "section": "Visualising network metrics",
-    "text": "Visualising network metrics\nIt is important to note that from ggraph v2.0 onward tidygraph algorithms such as centrality measures can be accessed directly in ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge centrality measures on the graph in order to use them in a plot.\n\ng &lt;- GAStech_graph %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(colour = Department, \n                      size = centrality_betweenness()))\ng + theme_graph()"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-community",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#visualising-community",
-    "title": "Hands-on_Ex05",
-    "section": "Visualising Community",
-    "text": "Visualising Community\n\ngroup_edge_betweenness(): Group densely connected nodes using igraph::cluster_edge_betweenness()\ngroup_fast_greedy(): Group nodes by optimising modularity using igraph::cluster_fast_greedy()\ngroup_infomap(): Group nodes by minimizing description length using igraph::cluster_infomap()\ngroup_label_prop(): Group nodes by propagating labels using igraph::cluster_label_prop()\ngroup_leading_eigen(): Group nodes based on the leading eigenvector of the modularity matrix using igraph::cluster_leading_eigen()\ngroup_louvain(): Group nodes by multilevel optimisation of modularity using igraph::cluster_louvain()\ngroup_leiden(): Group nodes according to the Leiden algorithm (igraph::cluster_leiden()) which is similar, but more efficient and provides higher quality results than cluster_louvain()\ngroup_optimal(): Group nodes by optimising the moldularity score using igraph::cluster_optimal()\ngroup_spinglass(): Group nodes using simulated annealing with igraph::cluster_spinglass()\ngroup_walktrap(): Group nodes via short random walks using igraph::cluster_walktrap()\ngroup_fluid(): Group nodes by simulating fluid interactions on the graph topology using igraph::cluster_fluid_communities()\ngroup_biconnected_component(): Group edges by their membership of the maximal binconnected components using igraph::biconnected_components()\ngroup_color(): Groups nodes by their color using igraph::greedy_vertex_coloring(). Be aware that this is not a clustering algorithm as coloring specifically provide a color to each node so that no neighbors have the same color\n\n\ng &lt;- GAStech_graph %&gt;%\n  mutate(community = as.factor(\n    group_edge_betweenness(\n      weights = Weight, \n      directed = TRUE))) %&gt;%\n  ggraph(layout = \"fr\") + \n  geom_edge_link(\n    aes(\n      width=Weight), \n    alpha=0.2) +\n  scale_edge_width(\n    range = c(0.1, 5)) +\n  geom_node_point(\n    aes(colour = community))  \n\ng + theme_graph()\n\n\n\n\n\n\n\n\nIn order to support effective visual investigation, the community network above has been revised by using geom_mark_hull() of ggforce package.\n\ng &lt;- GAStech_graph %&gt;%\n  activate(nodes) %&gt;%\n  mutate(community = as.factor(\n    group_optimal(weights = Weight)),\n         betweenness_measure = centrality_betweenness()) %&gt;%\n  ggraph(layout = \"fr\") +\n  geom_mark_hull(\n    aes(x, y, \n        group = community, \n        fill = community),  \n    alpha = 0.2,  \n    expand = unit(0.3, \"cm\"),  # Expand\n    radius = unit(0.3, \"cm\")  # Smoothness\n  ) + \n  geom_edge_link(aes(width=Weight), \n                 alpha=0.2) +\n  scale_edge_width(range = c(0.1, 5)) +\n  geom_node_point(aes(fill = Department,\n                      size = betweenness_measure),\n                      color = \"black\",\n                      shape = 21)\n  \ng + theme_graph()"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-preparation",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#data-preparation",
-    "title": "Hands-on_Ex05",
-    "section": "Data preparation",
-    "text": "Data preparation\n\nGAStech_edges_aggregated &lt;- GAStech_edges %&gt;%\n  left_join(GAStech_nodes, by = c(\"sourceLabel\" = \"label\")) %&gt;%\n  rename(from = id) %&gt;%\n  left_join(GAStech_nodes, by = c(\"targetLabel\" = \"label\")) %&gt;%\n  rename(to = id) %&gt;%\n  filter(MainSubject == \"Work related\") %&gt;%\n  group_by(from, to) %&gt;%\n    summarise(weight = n()) %&gt;%\n  filter(from!=to) %&gt;%\n  filter(weight &gt; 1) %&gt;%\n  ungroup()"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-the-first-interactive-network-graph",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#plotting-the-first-interactive-network-graph",
-    "title": "Hands-on_Ex05",
-    "section": "Plotting the first interactive network graph",
-    "text": "Plotting the first interactive network graph\nThe code chunk below will be used to plot an interactive network graph by using the data prepared.\n\nvisNetwork(GAStech_nodes, \n           GAStech_edges_aggregated)"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-layout",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-layout",
-    "title": "Hands-on_Ex05",
-    "section": "Working with layout",
-    "text": "Working with layout\nIn the code chunk below, Fruchterman and Reingold layout is used. The layout is configurable with visLayout() and visHierarchicalLayout() functions.\n\nlevelSeparation, the distance between the different levels.\ndirection, the direction of the hierarchical layout.\nsortMethod, the algorithm used to ascertain the levels of the nodes based on the data\nvisHierarchicalLayout() same as visLayout(hierarchical = TRUE)\nUse igraph layout to compute coordinates for fast rendering with visIgraphLayout()\nTransform igraph network to visNetwork network using visIgraph() or toVisNetworkData()\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\")"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---nodes",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---nodes",
-    "title": "Hands-on_Ex05",
-    "section": "Working with visual attributes - Nodes",
-    "text": "Working with visual attributes - Nodes\nvisNetwork() looks for a field called “group” in the nodes object and colour the nodes according to the values of the group field.\n\nGAStech_nodes &lt;- GAStech_nodes %&gt;%\n  rename(group = Department) \n\nWhen we rerun the code chunk below, visNetwork shades the nodes by assigning unique colour to each category in the group field.\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123) # to have always the same network"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---edges",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#working-with-visual-attributes---edges",
-    "title": "Hands-on_Ex05",
-    "section": "Working with visual attributes - Edges",
-    "text": "Working with visual attributes - Edges\nIn the code run below visEdges() is used to symbolise the edges. - The argument arrows is used to define where to place the arrow. - The smooth argument is used to plot the edges using a smooth curve.\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visEdges(arrows = \"to\", \n           smooth = list(enabled = TRUE, \n                         type = \"curvedCW\")) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)\n\n\n\n\n\nEdges must be a data.frame, with at least from and to columns, which make the link with id of nodes. You can add properties simply by adding variables on data.frame. edges &lt;- data.frame(from = sample(1:10,8), to = sample(1:10, 8)\n# add labels on edges\nlabel = paste(“Edge”, 1:8),\n# length length = c(100,500),\n# width width = c(4,1),\n# arrows arrows = c(“to”, “from”, “middle”, “middle;to”),\n# dashes dashes = c(TRUE, FALSE),\n# tooltip (html or character) title = paste(“Edge”, 1:8),\n# smooth smooth = c(FALSE, TRUE),\n# shadow shadow = c(FALSE, TRUE, FALSE, TRUE))"
-  },
-  {
-    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#interactivity",
-    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html#interactivity",
-    "title": "Hands-on_Ex05",
-    "section": "Interactivity",
-    "text": "Interactivity\nIn the code chunk below, visOptions() is used to incorporate interactivity features in the data visualisation.\n\nThe argument highlightNearest highlights nearest when clicking a node.\nThe argument nodesIdSelection adds an id node selection creating an HTML select element.\n\n\nvisNetwork(GAStech_nodes,\n           GAStech_edges_aggregated) %&gt;%\n  visIgraphLayout(layout = \"layout_with_fr\") %&gt;%\n  visOptions(highlightNearest = TRUE,\n             nodesIdSelection = TRUE) %&gt;%\n  visLegend() %&gt;%\n  visLayout(randomSeed = 123)"
+    "objectID": "In-calss Exercise/In-class_Ex05.html#visualising-the-knowledge-graph",
+    "href": "In-calss Exercise/In-class_Ex05.html#visualising-the-knowledge-graph",
+    "title": "In-class Exercise 05",
+    "section": "Visualising the knowledge graph",
+    "text": "Visualising the knowledge graph\n\nset.seed(1234)\n\n\nVisualising the whole Graph\n\nggraph(graph,layout = \"fr\") +\n  geom_edge_link(alpha = 0.3,\n                 colour = \"gray\")+\n  geom_node_point(aes(color = `Node Type`),\n                  size = 4) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()\n\n\n\nStep 1: Filter edges to onliy “Memberof”\n\ngraph_memberof &lt;- graph %&gt;%\n  activate(edges) %&gt;%\n  filter(`Edge Type` == \"MemberOf\")\n\n\n\nStep 2: Extract only connected nodes(i.e. used in these edges)\n\nused_node_indices&lt;- graph_memberof %&gt;%\n  activate(edges) %&gt;%\n  as_tibble() %&gt;%\n  select(from, to) %&gt;%\n  unlist() %&gt;%\n  unique()\n\n\n\nStep 3: Keep only those nodes\n\ngraph_memberof &lt;- graph_memberof %&gt;%\n  activate(nodes) %&gt;% \n  mutate(row_id = row_number()) %&gt;% \n  filter(row_id %in% used_node_indices) %&gt;% \n  select(-row_id) #optional cleanup\n\n\n\nPlot the sub-graph\n\nggraph(graph_memberof,\n       layout = \"fr\") +\n  geom_edge_link(alpha = 0.5,\n                 colour = \"gray\") +\n  geom_node_point(aes(color = `Node Type`),\n                  size = 1) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()\n\nWarning: ggrepel: 789 unlabeled data points (too many overlaps). Consider\nincreasing max.overlaps"
   }
 ]

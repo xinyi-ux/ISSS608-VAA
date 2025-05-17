@@ -227,6 +227,7 @@ ggplot(exam,
 :::
 
 Instead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below. 
+
 :::panel-tabset 
 ### The plot
 
@@ -269,7 +270,6 @@ ggplot(exam,
   ) +
   theme_ridges()
 ```
-
 :::
 
 # Visualising Distribution with Raincloud Plot
