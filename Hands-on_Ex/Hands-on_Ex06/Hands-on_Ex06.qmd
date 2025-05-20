@@ -77,9 +77,11 @@ make_hr_wkday <- function(ts, sc, tz) {
   }
 ```
 
-::: note
+::: {.note}
+
 -   `ymd_hms()` and `hour()` are from **lubridate** package, and\
 -   `weekdays()` is a **base** R function.
+
 :::
 
 Step 2:Deriving the attacks tibble data frame
@@ -102,7 +104,8 @@ attacks <- attacks %>%
       hour, levels = 0:23))
 ```
 
-::: note
+::: {.note}
+
 Beside extracting the necessary data into attacks data frame, `mutate()` of dplyr package is used to convert wkday and hour fields into factor so they’ll be ordered when plotting
 :::
 
@@ -154,7 +157,8 @@ theme(axis.ticks = element_blank(),
 
 -   coord_equal() is used to ensure the plot will have an aspect ratio of 1:1.
 
--   scale_fill_gradient() function is used to creates a two colour gradient (low-high). :::
+-   scale_fill_gradient() function is used to creates a two colour gradient (low-high). 
+:::
 
 Then we can simply group the count by hour and wkday and plot it, since we know that we have values for every combination there’s no need to further preprocess the data.
 
@@ -169,6 +173,8 @@ In order to identify the top 4 countries with the highest number of attacks, you
 -   calculate the percent of attackes by country
 
 -   save the results in a tibble data frame
+
+ 
 
 ```{r}
 attacks_by_country <- count(
@@ -308,5 +314,7 @@ rice %>%
 ```
 
 ::: Things to learn from the code chunk above
+
 For effective data visualisation design, `factor()` is used convert the value type of Year field from numeric to factor.
+
 :::
