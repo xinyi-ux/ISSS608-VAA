@@ -277,7 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 20, 2025</p>
+      <p class="date-modified">May 21, 2025</p>
     </div>
   </div>
     
@@ -384,12 +384,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dt)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="note">
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><code>ymd_hms()</code> and <code>hour()</code> are from <strong>lubridate</strong> package, and<br>
 </li>
 <li><code>weekdays()</code> is a <strong>base</strong> R function.</li>
 </ul>
+</div>
 </div>
 <p>Step 2:Deriving the attacks tibble data frame</p>
 <div class="cell">
@@ -409,8 +419,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hour  =</span> <span class="fu">factor</span>(</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      hour, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">23</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="note">
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Beside extracting the necessary data into attacks data frame, <code>mutate()</code> of dplyr package is used to convert wkday and hour fields into factor so they’ll be ordered when plotting</p>
+</div>
 </div>
 <p>Table below shows the tidy tibble table after processing.</p>
 <div class="cell">
@@ -502,7 +522,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>::: Things to learn from the code chunk</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learn from the code chunk above
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li><p>a tibble data table called grouped is derived by aggregating the attack by wkday and hour fields.</p></li>
 <li><p>a new field called n is derived by using group_by() and count() functions.</p></li>
@@ -510,8 +539,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>geom_tile() is used to plot tiles (grids) at each x and y position. color and size arguments are used to specify the border color and line size of the tiles.</p></li>
 <li><p><strong>theme_tufte()</strong> of ggthemes package is used to remove unnecessary chart junk. To learn which visual components of default ggplot2 have been excluded, you are encouraged to comment out this line to examine the default plot.</p></li>
 <li><p>coord_equal() is used to ensure the plot will have an aspect ratio of 1:1.</p></li>
-<li><p>scale_fill_gradient() function is used to creates a two colour gradient (low-high). :::</p></li>
+<li><p>scale_fill_gradient() function is used to creates a two colour gradient (low-high).</p></li>
 </ul>
+</div>
+</div>
 <p>Then we can simply group the count by hour and wkday and plot it, since we know that we have values for every combination there’s no need to further preprocess the data.</p>
 </section>
 <section id="plotting-multiple-calendar-heatmaps" class="level1">
@@ -657,7 +688,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>::: Things to learn from the code chunk above For effective data visualisation design, <code>factor()</code> is used convert the value type of Year field from numeric to factor. :::</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learn from the code chunk above
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For effective data visualisation design, <code>factor()</code> is used convert the value type of Year field from numeric to factor.</p>
+</div>
+</div>
 
 
 </section>
