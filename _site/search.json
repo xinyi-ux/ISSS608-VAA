@@ -75,5 +75,173 @@
     "title": "Hands-on Exercise 6",
     "section": "2.3 Data preparation",
     "text": "2.3 Data preparation\nStep 1: Deriving weekday and hour of day fields\nBefore we can plot the calender heatmap, two new fields namely wkday and hour need to be derived. In this step, we will write a function to perform the task.\n\nmake_hr_wkday &lt;- function(ts, sc, tz) {\n  real_times &lt;- ymd_hms(ts, \n                        tz = tz[1], \n                        quiet = TRUE)\n  dt &lt;- data.table(source_country = sc,\n                   wkday = weekdays(real_times),\n                   hour = hour(real_times))\n  return(dt)\n  }\n\n\n\n\n\n\n\nnote\n\n\n\n\nymd_hms() and hour() are from lubridate package, and\n\nweekdays() is a base R function.\n\n\n\nStep 2:Deriving the attacks tibble data frame\n\nwkday_levels &lt;- c('Saturday', 'Friday', \n                  'Thursday', 'Wednesday', \n                  'Tuesday', 'Monday', \n                  'Sunday')\n\nattacks &lt;- attacks %&gt;%\n  group_by(tz) %&gt;%\n  do(make_hr_wkday(.$timestamp, \n                   .$source_country, \n                   .$tz)) %&gt;% \n  ungroup() %&gt;% \n  mutate(wkday = factor(\n    wkday, levels = wkday_levels),\n    hour  = factor(\n      hour, levels = 0:23))\n\n\n\n\n\n\n\nnote\n\n\n\nBeside extracting the necessary data into attacks data frame, mutate() of dplyr package is used to convert wkday and hour fields into factor so they’ll be ordered when plotting\n\n\nTable below shows the tidy tibble table after processing.\n\nkable(head(attacks))\n\n\n\n\ntz\nsource_country\nwkday\nhour\n\n\n\n\nAfrica/Cairo\nBG\nSaturday\n20\n\n\nAfrica/Cairo\nTW\nSunday\n6\n\n\nAfrica/Cairo\nTW\nSunday\n8\n\n\nAfrica/Cairo\nCN\nSunday\n11\n\n\nAfrica/Cairo\nUS\nSunday\n15\n\n\nAfrica/Cairo\nCA\nMonday\n11"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html",
+    "title": "Take-home_Exercise02",
+    "section": "",
+    "text": "In this exercise, we will be tacking Mini-case 1 of VAST Challenge 2025.\nThis case study explores the career trajectory of Oceanus Folk artist Sailor Shift using network visual analytics. The goal is to understand her collaborations, influences, and her role in the evolution and diffusion of the Oceanus Folk genre.\nWe are going to design and develop visualizations and visual analytic tools to solve following questions.\n\n\nWe will use the dataset provided by VAST Challenge. We utilize a JSON network graph (MC1_graph.json) which comprises nodes (Artists, Albums, Songs, Organizations, Bands) and edges (relationships).\n\n\n\nTo answer all three questions, we have to develop beautiful and informative visualizations of this data and uncover new and interesting information about Sailor’s influence.\nFirstly, using directed multigraph to trace connections, collaborations, and influence paths in Sailor Shift’s career.\nSecondly, using ego-networks of individuals can provide insight into why one individual’s perceptions, identity, and behavior differ from another’s. This can identify collaborators she worked with and spot key influencers and those influenced by her.\nThirdly, Timeline Animation animation-timeline is included in the animation shorthand as a reset-only value. This means that including animation resets a previously-declared animation-timeline value to auto, but a specific value cannot be set via animation. In thi case, each frame shows the number of Oceanus Folk songs released that year and helps identify bursts of popularity.\nLastly, Centrality Measures, it is used for finding very connected individuals, popular individuals, individuals who are likely to hold most information. PageRank is used to rank artits and predict the future."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#the-data",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#the-data",
+    "title": "Take-home_Exercise02",
+    "section": "",
+    "text": "We will use the dataset provided by VAST Challenge. We utilize a JSON network graph (MC1_graph.json) which comprises nodes (Artists, Albums, Songs, Organizations, Bands) and edges (relationships)."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#methodology",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#methodology",
+    "title": "Take-home_Exercise02",
+    "section": "",
+    "text": "To answer all three questions, we have to develop beautiful and informative visualizations of this data and uncover new and interesting information about Sailor’s influence.\nFirstly, using directed multigraph to trace connections, collaborations, and influence paths in Sailor Shift’s career.\nSecondly, using ego-networks of individuals can provide insight into why one individual’s perceptions, identity, and behavior differ from another’s. This can identify collaborators she worked with and spot key influencers and those influenced by her.\nThirdly, Timeline Animation animation-timeline is included in the animation shorthand as a reset-only value. This means that including animation resets a previously-declared animation-timeline value to auto, but a specific value cannot be set via animation. In thi case, each frame shows the number of Oceanus Folk songs released that year and helps identify bursts of popularity.\nLastly, Centrality Measures, it is used for finding very connected individuals, popular individuals, individuals who are likely to hold most information. PageRank is used to rank artits and predict the future."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#loading-packages",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#loading-packages",
+    "title": "Take-home_Exercise02",
+    "section": "2.1 Loading Packages",
+    "text": "2.1 Loading Packages\n\njsonlite: To convert JSON data to R objects\ntidyverse: Collection of R packages designed for data science\nggraph: To support relational data structures\ntidygraph: Two tidy data frames describing node and edge data respectively.\nigraph: Routines for simple graphs and network analysis\nlubridate: R package that makes it easier to work with dates and times.\ngganimate: The description of animation\ngifski: To create animated GIF images with thousands of colors per frame"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#inspect-structure",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#inspect-structure",
+    "title": "Take-home_Exercise02",
+    "section": "Inspect Structure",
+    "text": "Inspect Structure\n\nstr(kg,max.level=1)\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     :List of 2\n $ nodes     :'data.frame': 17412 obs. of  10 variables:\n $ links     :'data.frame': 37857 obs. of  4 variables:"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#extract-and-inspect",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#extract-and-inspect",
+    "title": "Take-home_Exercise02",
+    "section": "Extract and Inspect",
+    "text": "Extract and Inspect\n\nnodes_tb1 &lt;- as_tibble(kg$nodes)\nedges_tb1 &lt;- as_tibble(kg$links)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#initial-eda",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#initial-eda",
+    "title": "Take-home_Exercise02",
+    "section": "Initial EDA",
+    "text": "Initial EDA\n\nEdge Types for Influence Detection\n\nedges_tb1 %&gt;%\n  count(`Edge Type`) %&gt;%\n  arrange(desc(n)) %&gt;%\n  ggplot(aes(x = reorder(`Edge Type`, n), y = n)) +\n  geom_col(fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Edge Types in Music Knowledge Graph\", x = \"Edge Type\", y = \"Count\")\n\n\n\n\n\n\n\n\n\n\nCount each Node Type in your knowledge graph\n\nggplot(nodes_tb1, aes(x = `Node Type`)) +\n  geom_bar(fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Distribution of Node Types\", x = \"Count\", y = \"Node Type\") +\n  theme_minimal()"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#quick-scan-of-missing-values",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#quick-scan-of-missing-values",
+    "title": "Take-home_Exercise02",
+    "section": "Quick scan of missing values",
+    "text": "Quick scan of missing values\n\nSmartEDA::ExpData(data = nodes_tb1, type = 1)  # Summary table\n\n                                          Descriptions   Value\n1                                   Sample size (nrow)   17412\n2                              No. of variables (ncol)      10\n3                    No. of numeric/interger variables       1\n4                              No. of factor variables       0\n5                                No. of text variables       7\n6                             No. of logical variables       2\n7                          No. of identifier variables       1\n8                                No. of date variables       0\n9             No. of zero variance variables (uniform)       0\n10               %. of variables having complete cases 30% (3)\n11   %. of variables having &gt;0% and &lt;50% missing cases  0% (0)\n12 %. of variables having &gt;=50% and &lt;90% missing cases 40% (4)\n13          %. of variables having &gt;=90% missing cases 30% (3)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#specific-focus",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#specific-focus",
+    "title": "Take-home_Exercise02",
+    "section": "Specific focus",
+    "text": "Specific focus\n\nnodes_tb1 %&gt;%\n  summarise(across(c(name, `Node Type`, genre, release_date, notable), ~ sum(is.na(.)))) %&gt;%\n  pivot_longer(everything(), names_to = \"Field\", values_to = \"Missing Count\")\n\n# A tibble: 5 × 2\n  Field        `Missing Count`\n  &lt;chr&gt;                  &lt;int&gt;\n1 name                       0\n2 Node Type                  0\n3 genre                  12801\n4 release_date           12801\n5 notable                12801\n\n\nBased on the nodes_tb1, these missing values are from non-song and non-album nodes. Mostly, they are under Person,RecordLabel,and MusicalGroup column. Those columns do not require genre,release_date,or notable."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualizing-only-complete-records",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualizing-only-complete-records",
+    "title": "Take-home_Exercise02",
+    "section": "Visualizing only complete records",
+    "text": "Visualizing only complete records\n\nnodes_tb1_filtered &lt;- nodes_tb1 %&gt;%\n  filter(`Node Type` %in% c(\"Song\", \"Album\")) %&gt;%\n  drop_na(genre, release_date)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#creating-knowledge-graph",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#creating-knowledge-graph",
+    "title": "Take-home_Exercise02",
+    "section": "Creating Knowledge Graph",
+    "text": "Creating Knowledge Graph\n\nStep 1: Mapping from node id to row index\nBefore we can go ahead to build the tidygraph object, it is important for us to ensures each id from the node list is mapped to the correct row number. This requirement can be achive by using the code chunk below.\n\nid_map&lt;- tibble(id= nodes_tb1$id,\n                index = seq_len(\n                  nrow(nodes_tb1)))\n\nThis ensures each id from your node list is mapped to the correct row number.\nTo avoid residual columns, run this before repeating joins:\n\nedges_tb1 &lt;- edges_tb1 %&gt;%\n  select(-starts_with(\"from\"), -starts_with(\"to\"))\n\n\n\nStep 2 : Map source and target IDs to row indices\nNext, we will map the source and the target IDs to row indices by using the code chunk below.\n\nedges_tb1 &lt;- edges_tb1 %&gt;%\n  left_join(id_map %&gt;% rename(from = index), by = c(\"source\" = \"id\")) %&gt;%\n  left_join(id_map %&gt;% rename(to = index), by = c(\"target\" = \"id\"))\n\n\n\nStep 3: Filter out any unmatched(invalid) edges\n\nedges_tb1 &lt;- edges_tb1 %&gt;%\n  filter(!is.na(from), !is.na(to))\n\n\n\nStep 4: creating the graph\nLastly,tbl_grph() is used to create tidygraph’s graph object by using the code chunk below.\n\ngraph = tbl_graph(nodes = nodes_tb1,\n                  edges = edges_tb1,\n                  directed = kg$directed)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualising-the-knowledge-graph",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualising-the-knowledge-graph",
+    "title": "Take-home_Exercise02",
+    "section": "Visualising the knowledge graph",
+    "text": "Visualising the knowledge graph\n\nset.seed(1234)\n\n\nVisualising the whole Graph\n\nggraph(graph,layout = \"fr\") +\n  geom_edge_link(alpha = 0.3,\n                 colour = \"gray\")+\n  geom_node_point(aes(color = `Node Type`),\n                  size = 4) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualising-the-sub-graph",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visualising-the-sub-graph",
+    "title": "Take-home_Exercise02",
+    "section": "Visualising the sub-graph",
+    "text": "Visualising the sub-graph\n\nStep 1: Filter edges to onliy “Memberof”\n\ngraph_memberof &lt;- graph %&gt;%\n  activate(edges) %&gt;%\n  filter(`Edge Type` == \"MemberOf\")\n\n\n\nStep 2: Extract only connected nodes(i.e. used in these edges)\n\nused_node_indices&lt;- graph_memberof %&gt;%\n  activate(edges) %&gt;%\n  as_tibble() %&gt;%\n  select(from, to) %&gt;%\n  unlist() %&gt;%\n  unique()\n\n\n\nStep 3: Keep only those nodes\n\ngraph_memberof &lt;- graph_memberof %&gt;%\n  activate(nodes) %&gt;% \n  mutate(row_id = row_number()) %&gt;% \n  filter(row_id %in% used_node_indices) %&gt;% \n  select(-row_id) #optional cleanup\n\n\n\nStep 4: Plot the sub-graph\nThis graph shows her early connections and collaborators, which shaped her musical direction and laid the groundwork for future influences across Oceanus Folk.\n\nset.seed(1234)\nggraph(graph_memberof,\n       layout = \"fr\") +\n  geom_edge_link(alpha = 0.5,\n                 colour = \"gray\") +\n  geom_node_point(aes(color = `Node Type`),\n                  size = 1) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#who-has-sailor-collaborated-with",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#who-has-sailor-collaborated-with",
+    "title": "Take-home_Exercise02",
+    "section": "Who has Sailor collaborated with?",
+    "text": "Who has Sailor collaborated with?\nCollaboration means artists who worked on the same songs or albums with Sailor.\n\ncollab_types &lt;- c(\"PerformerOf\", \"ComposerOf\", \"ProducerOf\", \"LyricistOf\")\n\n# Get Sailor's ID\nsailor_id &lt;- nodes_tb1 %&gt;% filter(name == \"Sailor Shift\") %&gt;% pull(id)\n\n# Find works Sailor contributed to\nsailor_works &lt;- edges_tb1 %&gt;%\n  filter(source == sailor_id, `Edge Type` %in% collab_types) %&gt;%\n  pull(target)\n\n# Find other artists who also worked on those works\ncollaborators &lt;- edges_tb1 %&gt;%\n  filter(target %in% sailor_works, `Edge Type` %in% collab_types, source != sailor_id) %&gt;%\n  left_join(nodes_tb1, by = c(\"source\" = \"id\")) %&gt;%\n  distinct(name, `Node Type`, genre, notable)\n\nAfter running the code above, we can get a list of Sailor’s direct collaborators, many of whom may also be emerging Oceanus Folk artists."
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#who-has-sailor-influenceddirectly-or-indirectly",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#who-has-sailor-influenceddirectly-or-indirectly",
+    "title": "Take-home_Exercise02",
+    "section": "Who has Sailor influenced(directly or indirectly)",
+    "text": "Who has Sailor influenced(directly or indirectly)\nDirect influence: Works that sample, cover, or are inspired by Sailor’s work.\nIndirect influence: Artists influenced by those directly influenced by Sailor.\n\ninfluence_types &lt;- c(\"InStyleOf\", \"CoverOf\", \"LyricalReferenceTo\", \"InterpolatesFrom\", \"DirectlySamples\")\n\n# Step 1: Direct influence: who did Sailor influence?\nsailor_influence_targets &lt;- edges_tb1 %&gt;%\n  filter(source == sailor_id, `Edge Type` %in% influence_types) %&gt;%\n  pull(target)\n\ndirect_influenced &lt;- nodes_tb1 %&gt;% filter(id %in% sailor_influence_targets)\n\n# Step 2: Indirect influence: who did THEY influence?\nindirect_influence_targets &lt;- edges_tb1 %&gt;%\n  filter(source %in% sailor_influence_targets, `Edge Type` %in% influence_types) %&gt;%\n  pull(target)\n\nindirect_influenced &lt;- nodes_tb1 %&gt;% filter(id %in% indirect_influence_targets)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#all-direct-and-indirect-influence-targets-in-one-list",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#all-direct-and-indirect-influence-targets-in-one-list",
+    "title": "Take-home_Exercise02",
+    "section": "All direct and indirect influence targets in one list",
+    "text": "All direct and indirect influence targets in one list\n\ninfluence_all &lt;- bind_rows(\n  direct_influenced %&gt;% mutate(level = \"Direct\"),\n  indirect_influenced %&gt;% mutate(level = \"Indirect\")\n) %&gt;%\n  distinct(id, name, `Node Type`, genre, level)"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence",
+    "title": "Take-home_Exercise02",
+    "section": "visNetwork Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence",
+    "text": "visNetwork Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence\n\ncollaborator_ids &lt;- collaborators %&gt;%\n  left_join(nodes_tb1, by = \"name\") %&gt;%\n  pull(id)\n\nnodes_combined &lt;- nodes_tb1 %&gt;%\n  filter(id %in% c(sailor_id, collaborator_ids, direct_influenced$id, indirect_influenced$id)) %&gt;%\n  mutate(role = case_when(\n    id == sailor_id ~ \"Sailor\",\n    id %in% collaborator_ids ~ \"Collaborator\",\n    id %in% direct_influenced$id ~ \"Direct Influence\",\n    id %in% indirect_influenced$id ~ \"Indirect Influence\",\n    TRUE ~ \"Other\"\n  ))\n\n\nlibrary(dplyr)\nlibrary(visNetwork)\n\n# Step 1: Setup\ncollab_types &lt;- c(\"PerformerOf\", \"ComposerOf\", \"ProducerOf\", \"LyricistOf\")\ninfluence_types &lt;- c(\"InStyleOf\", \"CoverOf\", \"LyricalReferenceTo\", \"InterpolatesFrom\", \"DirectlySamples\")\n\n# Step 2: Get Sailor's ID\nsailor_id &lt;- nodes_tb1 %&gt;% filter(name == \"Sailor Shift\") %&gt;% pull(id)\n\n# Step 3: Collaboration network (works + co-creators)\nsailor_works &lt;- edges_tb1 %&gt;%\n  filter(source == sailor_id, `Edge Type` %in% collab_types) %&gt;%\n  pull(target)\n\ncollaborator_edges &lt;- edges_tb1 %&gt;%\n  filter(target %in% sailor_works,\n         `Edge Type` %in% collab_types,\n         source != sailor_id)\n\ncollaborator_ids &lt;- collaborator_edges$source\n\n# Step 4: Direct influence\ndirect_ids &lt;- edges_tb1 %&gt;%\n  filter(source == sailor_id, `Edge Type` %in% influence_types) %&gt;%\n  pull(target)\n\n# Step 5: Indirect influence\nindirect_ids &lt;- edges_tb1 %&gt;%\n  filter(source %in% direct_ids, `Edge Type` %in% influence_types) %&gt;%\n  pull(target)\n\n# Step 6: Combine node IDs\nall_ids &lt;- unique(c(sailor_id, collaborator_ids, direct_ids, indirect_ids))\n\nnodes_combined &lt;- nodes_tb1 %&gt;%\n  filter(id %in% all_ids) %&gt;%\n  mutate(role = case_when(\n    id == sailor_id ~ \"Sailor\",\n    id %in% collaborator_ids ~ \"Collaborator\",\n    id %in% direct_ids ~ \"Direct Influence\",\n    id %in% indirect_ids ~ \"Indirect Influence\",\n    TRUE ~ \"Other\"\n  )) %&gt;%\n  mutate(\n    label = name,\n    title = paste0(\"&lt;b&gt;\", name, \"&lt;/b&gt;&lt;br&gt;Type: \", `Node Type`, \"&lt;br&gt;Role: \", role),\n    group = role\n  )\n\n# Step 7: Combine edges among relevant nodes\nedges_combined &lt;- edges_tb1 %&gt;%\n  filter(source %in% nodes_combined$id & target %in% nodes_combined$id)\n\n# Remove existing `from`/`to` if present\nif (\"from\" %in% colnames(edges_combined) | \"to\" %in% colnames(edges_combined)) {\n  edges_combined &lt;- edges_combined %&gt;%\n    select(-from, -to)\n}\n\n# Now safely rename\nedges_vis &lt;- edges_combined %&gt;%\n  rename(from = source, to = target) %&gt;%\n  mutate(arrows = \"to\")\n\n\n# Step 8: Plot using visNetwork\nvisNetwork(nodes_combined, edges_combined) %&gt;%\n  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %&gt;%\n  visGroups(groupname = \"Sailor\", color = \"red\") %&gt;%\n  visGroups(groupname = \"Collaborator\", color = \"#1f78b4\") %&gt;%\n  visGroups(groupname = \"Direct Influence\", color = \"#33a02c\") %&gt;%\n  visGroups(groupname = \"Indirect Influence\", color = \"#b2df8a\") %&gt;%\n  visPhysics(solver = \"forceAtlas2Based\") %&gt;%\n  visLayout(randomSeed = 1234) %&gt;%\n  visLegend() %&gt;%\n  visExport()"
+  },
+  {
+    "objectID": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#use-visnetwork-to-present-the-genre-librarydplyr",
+    "href": "Take-home_Exercise/Take-home_Ex02/Take-home_Exercise02.html#use-visnetwork-to-present-the-genre-librarydplyr",
+    "title": "Take-home_Exercise02",
+    "section": "Use visNetwork to present the genre-library(dplyr)",
+    "text": "Use visNetwork to present the genre-library(dplyr)\n\nlibrary(dplyr)\nlibrary(visNetwork)\n\n# Step 1: Filter influence-type edges between nodes with valid genre\ninfluence_types &lt;- c(\"InStyleOf\", \"CoverOf\", \"LyricalReferenceTo\", \"InterpolatesFrom\", \"DirectlySamples\")\n\ngenre_edges &lt;- edges_tb1 %&gt;%\n  filter(`Edge Type` %in% influence_types) %&gt;%\n  left_join(nodes_tb1 %&gt;% select(id, genre), by = c(\"source\" = \"id\")) %&gt;%\n  rename(source_genre = genre) %&gt;%\n  left_join(nodes_tb1 %&gt;% select(id, genre), by = c(\"target\" = \"id\")) %&gt;%\n  rename(target_genre = genre) %&gt;%\n  filter(!is.na(source_genre), !is.na(target_genre), source_genre != target_genre)\n\n# Step 2: Create genre-level edge list (aggregate to avoid clutter)\ngenre_links &lt;- genre_edges %&gt;%\n  count(source_genre, target_genre, name = \"value\")\n\n# Step 3: Create unique genre node list\ngenre_nodes &lt;- unique(c(genre_links$source_genre, genre_links$target_genre)) %&gt;%\n  as_tibble() %&gt;% rename(label = value) %&gt;%\n  mutate(id = label)\n\n# Step 4: Build visNetwork-compatible data\nnodes_vis &lt;- genre_nodes %&gt;%\n  mutate(group = ifelse(label == \"Oceanus Folk\", \"Oceanus\", \"Other\"),\n         color = ifelse(label == \"Oceanus Folk\", \"#e31a1c\", \"#1f78b4\"))\n\nedges_vis &lt;- genre_links %&gt;%\n  rename(from = source_genre, to = target_genre)\n\n\nvisNetwork(nodes_vis, edges_vis) %&gt;%\n  visEdges(arrows = \"to\") %&gt;%\n  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %&gt;%\n  visLayout(randomSeed = 123) %&gt;%\n  visLegend() %&gt;%\n  visPhysics(solver = \"forceAtlas2Based\") %&gt;%\n  visHierarchicalLayout(enabled = FALSE) %&gt;%\n  visExport()"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html",
+    "title": "In-class Exercise 05",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, jsonlite, SmartEDA, tidygraph, ggraph)"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#inspect-structure",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#inspect-structure",
+    "title": "In-class Exercise 05",
+    "section": "Inspect Structure",
+    "text": "Inspect Structure\n\nstr(kg,max.level=1)\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     :List of 2\n $ nodes     :'data.frame': 17412 obs. of  10 variables:\n $ links     :'data.frame': 37857 obs. of  4 variables:"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#extract-and-inspect",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#extract-and-inspect",
+    "title": "In-class Exercise 05",
+    "section": "Extract and Inspect",
+    "text": "Extract and Inspect\n\nnodes_tb1 &lt;- as_tibble(kg$nodes)\nedges_tb1 &lt;- as_tibble(kg$links)"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#initial-eda",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#initial-eda",
+    "title": "In-class Exercise 05",
+    "section": "Initial EDA",
+    "text": "Initial EDA\n\nggplot(data = edges_tb1,\n       aes(y =`Edge Type`)) +\n     geom_bar()\n\n\n\n\n\n\n\n\n\nggplot(data = nodes_tb1,\n       aes(y =`Node Type`)) +\n     geom_bar()"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#creating-knowledge-graph",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#creating-knowledge-graph",
+    "title": "In-class Exercise 05",
+    "section": "Creating Knowledge Graph",
+    "text": "Creating Knowledge Graph\nThis is\n\nStep 1: Mapping from node id to row index\n\nid_map&lt;- tibble(id= nodes_tb1$id,\n                index = seq_len(\n                  nrow(nodes_tb1)))\n\nThis ensures each d from your node list is mapped to the correct row number.\n\n\nStep 2 : Map source and target IDs to row indices\n\nedges_tb1&lt;- edges_tb1 %&gt;%\n  left_join(id_map,by = c(\"source\"=\"id\"))%&gt;%\n  rename(from= index)%&gt;%\n  left_join(id_map,by = c(\"target\" =  \"id\"))%&gt;%\n  rename(to = index)\n\n\n\nStep3: Filter out any unmatched(invalid) edges\n\nedges_tb1 = edges_tb1 %&gt;%\n  filter(!is.na(from),!is.na(to))\n\n\n\nStep 4: creating the graph\nLastly,tbl_grph() is used to create tidygraph’s graph object by using the code chunk below.\n\ngraph = tbl_graph(nodes = nodes_tb1,\n                  edges = edges_tb1,\n                  directed = TRUE)"
+  },
+  {
+    "objectID": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#visualising-the-knowledge-graph",
+    "href": "In-calss Exercise/In-class_Ex05/In-class_Ex05.html#visualising-the-knowledge-graph",
+    "title": "In-class Exercise 05",
+    "section": "Visualising the knowledge graph",
+    "text": "Visualising the knowledge graph\n\nset.seed(1234)\n\n\nVisualising the whole Graph\n\nggraph(graph,layout = \"fr\") +\n  geom_edge_link(alpha = 0.3,\n                 colour = \"gray\")+\n  geom_node_point(aes(color = `Node Type`),\n                  size = 4) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()\n\n\n\nStep 1: Filter edges to onliy “Memberof”\n\ngraph_memberof &lt;- graph %&gt;%\n  activate(edges) %&gt;%\n  filter(`Edge Type` == \"MemberOf\")\n\n\n\nStep 2: Extract only connected nodes(i.e. used in these edges)\n\nused_node_indices&lt;- graph_memberof %&gt;%\n  activate(edges) %&gt;%\n  as_tibble() %&gt;%\n  select(from, to) %&gt;%\n  unlist() %&gt;%\n  unique()\n\n\n\nStep 3: Keep only those nodes\n\ngraph_memberof &lt;- graph_memberof %&gt;%\n  activate(nodes) %&gt;% \n  mutate(row_id = row_number()) %&gt;% \n  filter(row_id %in% used_node_indices) %&gt;% \n  select(-row_id) #optional cleanup\n\n\n\nPlot the sub-graph\n\nggraph(graph_memberof,\n       layout = \"fr\") +\n  geom_edge_link(alpha = 0.5,\n                 colour = \"gray\") +\n  geom_node_point(aes(color = `Node Type`),\n                  size = 1) +\n  geom_node_text(aes(label = name),\n                 repel = TRUE,\n                 size = 2.5) +\n  theme_void()\n\nWarning: ggrepel: 789 unlabeled data points (too many overlaps). Consider\nincreasing max.overlaps"
   }
 ]

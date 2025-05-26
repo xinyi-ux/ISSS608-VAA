@@ -1,0 +1,633 @@
+---
+title: "Take-home_Exercise02"
+author: "xu xinyi"
+format: html
+editor: visual
+date-modified: "last-modified"
+description: "VAST Challenge 2025 Mini-Challenge 1"
+categories: [tidyverse, haven,ggrepel, ggthemes,ggridges, ggdist,patchwork, scales] 
+execute: 
+       echo: true 
+       eval: true 
+       warning: false 
+       freeze: true
+---
+
+# 1 Overview
+
+In this exercise, we will be tacking Mini-case 1 of VAST Challenge 2025.
+
+This case study explores the career trajectory of Oceanus Folk artist Sailor Shift using network visual analytics. The goal is to understand her collaborations, influences, and her role in the evolution and diffusion of the Oceanus Folk genre.
+
+We are going to design and develop visualizations and visual analytic tools to solve following questions.
+
+## 1.1 The data
+
+We will use the dataset provided by VAST Challenge. We utilize a JSON network graph (MC1_graph.json) which comprises nodes (Artists, Albums, Songs, Organizations, Bands) and edges (relationships).
+
+## 1.2 Methodology
+
+To answer all three questions, we have to develop beautiful and informative visualizations of this data and uncover new and interesting information about Sailor's influence.
+
+Firstly, using directed multigraph to trace connections, collaborations, and influence paths in Sailor Shift's career.
+
+Secondly, using [ego-networks](https://faculty.ucr.edu/~hanneman/nettext/C9_Ego_networks.html#data) of individuals can provide insight into why one individual's perceptions, identity, and behavior differ from another's. This can identify collaborators she worked with and spot key influencers and those influenced by her.
+
+Thirdly, [Timeline Animation](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline) animation-timeline is included in the animation shorthand as a reset-only value. This means that including animation resets a previously-declared animation-timeline value to auto, but a specific value cannot be set via animation. In thi case, each frame shows the number of Oceanus Folk songs released that year and helps identify bursts of popularity.
+
+Lastly, [Centrality Measures](https://cambridge-intelligence.com/keylines-faqs-social-network-analysis/), it is used for finding very connected individuals, popular individuals, individuals who are likely to hold most information. [PageRank](https://www.geeksforgeeks.org/page-rank-algorithm-implementation/) is used to rank artits and predict the future.
+
+# 2 Setup
+
+## 2.1 Loading Packages
+
+-   [**jsonlite**](https://cran.r-project.org/web/packages/jsonlite/index.html)**:** To convert JSON data to R objects
+
+-   [**tidyverse**](https://tidyverse.tidyverse.org/): Collection of R packages designed for data science
+
+-   [**ggraph**](https://cran.r-project.org/web/packages/ggraph/index.html): To support relational data structures
+
+-   [**tidygraph**](https://cran.r-project.org/web/packages/tidygraph/index.html): Two tidy data frames describing node and edge data respectively.
+
+-   [**igraph**](https://igraph.org/)**:** Routines for simple graphs and network analysis
+
+-   [**lubridate**](https://lubridate.tidyverse.org/)**:** R package that makes it easier to work with dates and times.
+
+-   [**gganimate**](https://gganimate.com/)**:** The description of animation
+
+-   [**gifski**](https://ropensci.org/blog/2018/07/23/gifski-release/#what-is-gifski)**:** To create animated GIF images with thousands of colors per frame
+
+# Loading Packages
+
+```{r}
+pacman::p_load(tidyverse, jsonlite, SmartEDA, tidygraph, ggraph)
+```
+
+# Importing Knowledge Graph Data
+
+```{r}
+kg <- fromJSON("MC1_graph.json")
+```
+
+## Inspect Structure
+
+```{r}
+str(kg,max.level=1)
+```
+
+## Extract and Inspect
+
+```{r}
+nodes_tb1 <- as_tibble(kg$nodes)
+edges_tb1 <- as_tibble(kg$links)
+```
+
+## Initial EDA
+
+### Edge Types for Influence Detection
+
+```{r}
+edges_tb1 %>%
+  count(`Edge Type`) %>%
+  arrange(desc(n)) %>%
+  ggplot(aes(x = reorder(`Edge Type`, n), y = n)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Edge Types in Music Knowledge Graph", x = "Edge Type", y = "Count")
+
+```
+
+### Count each Node Type in your knowledge graph
+
+```{r}
+ggplot(nodes_tb1, aes(x = `Node Type`)) +
+  geom_bar(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Distribution of Node Types", x = "Count", y = "Node Type") +
+  theme_minimal()
+
+```
+
+## Quick scan of missing values
+
+```{r}
+SmartEDA::ExpData(data = nodes_tb1, type = 1)  # Summary table
+```
+
+## Specific focus
+
+```{r}
+nodes_tb1 %>%
+  summarise(across(c(name, `Node Type`, genre, release_date, notable), ~ sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "Field", values_to = "Missing Count")
+```
+
+Based on the `nodes_tb1`, these missing values are from non-song and non-album nodes. Mostly, they are under `Person`,`RecordLabel`,and `MusicalGroup` column. Those columns do not require `genre`,`release_date`,or `notable`.
+
+## Visualizing only complete records
+
+```{r}
+nodes_tb1_filtered <- nodes_tb1 %>%
+  filter(`Node Type` %in% c("Song", "Album")) %>%
+  drop_na(genre, release_date)
+```
+
+## Creating Knowledge Graph
+
+### Step 1: Mapping from node id to row index
+
+Before we can go ahead to build the tidygraph object, it is important for us to ensures each id from the node list is mapped to the correct row number. This requirement can be achive by using the code chunk below.
+
+```{r}
+id_map<- tibble(id= nodes_tb1$id,
+                index = seq_len(
+                  nrow(nodes_tb1)))
+
+```
+
+This ensures each id from your node list is mapped to the correct row number.
+
+To avoid residual columns, run this before repeating joins:
+
+```{r}
+edges_tb1 <- edges_tb1 %>%
+  select(-starts_with("from"), -starts_with("to"))
+```
+
+### Step 2 : Map source and target IDs to row indices
+
+Next, we will map the source and the target IDs to row indices by using the code chunk below.
+
+```{r}
+edges_tb1 <- edges_tb1 %>%
+  left_join(id_map %>% rename(from = index), by = c("source" = "id")) %>%
+  left_join(id_map %>% rename(to = index), by = c("target" = "id"))
+
+```
+
+### Step 3: Filter out any unmatched(invalid) edges
+
+```{r}
+edges_tb1 <- edges_tb1 %>%
+  filter(!is.na(from), !is.na(to))
+```
+
+### Step 4: creating the graph
+
+Lastly,`tbl_grph()` is used to create tidygraph's graph object by using the code chunk below.
+
+```{r}
+graph = tbl_graph(nodes = nodes_tb1,
+                  edges = edges_tb1,
+                  directed = kg$directed)
+```
+
+## Visualising the knowledge graph
+
+```{r}
+set.seed(1234)
+```
+
+### Visualising the whole Graph
+
+```{r}
+#| eval: false
+ggraph(graph,layout = "fr") +
+  geom_edge_link(alpha = 0.3,
+                 colour = "gray")+
+  geom_node_point(aes(color = `Node Type`),
+                  size = 4) +
+  geom_node_text(aes(label = name),
+                 repel = TRUE,
+                 size = 2.5) +
+  theme_void()
+```
+
+## Visualising the sub-graph
+
+### Step 1: Filter edges to onliy "Memberof"
+
+```{r}
+graph_memberof <- graph %>%
+  activate(edges) %>%
+  filter(`Edge Type` == "MemberOf")
+```
+
+### Step 2: Extract only connected nodes(i.e. used in these edges)
+
+```{r}
+used_node_indices<- graph_memberof %>%
+  activate(edges) %>%
+  as_tibble() %>%
+  select(from, to) %>%
+  unlist() %>%
+  unique()
+```
+
+### Step 3: Keep only those nodes
+
+```{r}
+graph_memberof <- graph_memberof %>%
+  activate(nodes) %>% 
+  mutate(row_id = row_number()) %>% 
+  filter(row_id %in% used_node_indices) %>% 
+  select(-row_id) #optional cleanup
+```
+
+### Step 4: Plot the sub-graph
+
+This graph shows her early connections and collaborators, which shaped her musical direction and laid the groundwork for future influences across Oceanus Folk.
+
+```{r}
+set.seed(1234)
+ggraph(graph_memberof,
+       layout = "fr") +
+  geom_edge_link(alpha = 0.5,
+                 colour = "gray") +
+  geom_node_point(aes(color = `Node Type`),
+                  size = 1) +
+  geom_node_text(aes(label = name),
+                 repel = TRUE,
+                 size = 2.5) +
+  theme_void()
+```
+
+# Sailor Shift’s Career Timeline
+
+```{r}
+ 
+# Step 1: Get Sailor's ID
+sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+
+# Step 2: Get performance/composition edges
+sailor_edges <- edges_tb1 %>%
+  filter(source == sailor_id,
+         `Edge Type` %in% c("PerformerOf", "ComposerOf"))
+
+# Step 3: Join with work nodes (songs/albums)
+library(lubridate)
+
+sailor_works <- sailor_edges %>%
+  left_join(nodes_tb1, by = c("target" = "id")) %>%
+  filter(`Node Type` %in% c("Song", "Album")) %>%
+  mutate(
+    release_date_clean = parse_date_time(release_date, orders = c("Ymd", "Y-m-d", "Y", "Ym")),
+    year = year(release_date_clean)
+  ) %>%
+  filter(!is.na(year)) %>%
+  select(name, `Node Type`, release_date, year, notable)
+ 
+# Step 4: Timeline plot: Number of releases per year
+sailor_works %>%
+  count(year) %>%
+  ggplot(aes(x = year, y = n)) +
+  geom_col(fill = "steelblue") +
+  geom_vline(xintercept = 2028, color = "red", linetype = "dashed") +
+  labs(
+    title = "Sailor Shift’s Career Timeline",
+    subtitle = "Red line = 2028 breakout year",
+    x = "Year",
+    y = "Number of Releases"
+  ) +
+  theme_minimal()
+
+```
+
+# Who has she been most influenced by over time?
+
+```{r}
+#| fig-width: 8
+
+ # Step 0: Define influence types from edge weights
+edge_weights <- tibble(
+  `Edge Type` = c("DirectlySamples", "InterpolatesFrom", "CoverOf", "InStyleOf", "LyricalReferenceTo"),
+  weight = c(5, 4, 3, 2, 1)
+)
+
+influence_types <- edge_weights$`Edge Type`
+
+# Step 1: Get Sailor’s ID
+sailor_id <- nodes_tb1 %>% 
+  filter(name == "Sailor Shift") %>% 
+  pull(id)
+
+# Step 2: Filter all edges where someone influenced her
+influences_on_sailor <- edges_tb1 %>%
+  filter(target == sailor_id, `Edge Type` %in% influence_types)
+
+# Step 3: Weighted Influence Scores
+top_weighted <- influences_on_sailor %>%
+  left_join(edge_weights, by = "Edge Type") %>%
+  group_by(source) %>%
+  summarise(score = sum(weight, na.rm = TRUE)) %>%
+  left_join(nodes_tb1, by = c("source" = "id")) %>%
+  arrange(desc(score)) %>%
+  select(name, `Node Type`, genre, score)
+
+# Step 4: Plot
+top_weighted %>%
+  slice_max(score, n = 10) %>%
+  ggplot(aes(x = reorder(name, score), y = score, fill = `Node Type`)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Top Influencers on Sailor Shift (Weighted)",
+    x = "Influencer",
+    y = "Influence Score"
+  ) +
+  theme_minimal()
+
+```
+
+# Who has she collaborated with and directly or indirectly influenced?
+
+## Who has Sailor collaborated with?
+
+Collaboration means artists who worked on the same songs or albums with Sailor.
+
+```{r}
+collab_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# Get Sailor's ID
+sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+
+# Find works Sailor contributed to
+sailor_works <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% collab_types) %>%
+  pull(target)
+
+# Find other artists who also worked on those works
+collaborators <- edges_tb1 %>%
+  filter(target %in% sailor_works, `Edge Type` %in% collab_types, source != sailor_id) %>%
+  left_join(nodes_tb1, by = c("source" = "id")) %>%
+  distinct(name, `Node Type`, genre, notable)
+ 
+```
+
+After running the code above, we can get a list of Sailor's direct collaborators, many of whom may also be emerging Oceanus Folk artists.
+
+## Who has Sailor influenced(directly or indirectly)
+
+Direct influence: Works that sample, cover, or are inspired by Sailor's work.
+
+Indirect influence: Artists influenced by those directly influenced by Sailor.
+
+```{r}
+influence_types <- c("InStyleOf", "CoverOf", "LyricalReferenceTo", "InterpolatesFrom", "DirectlySamples")
+
+# Step 1: Direct influence: who did Sailor influence?
+sailor_influence_targets <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% influence_types) %>%
+  pull(target)
+
+direct_influenced <- nodes_tb1 %>% filter(id %in% sailor_influence_targets)
+
+# Step 2: Indirect influence: who did THEY influence?
+indirect_influence_targets <- edges_tb1 %>%
+  filter(source %in% sailor_influence_targets, `Edge Type` %in% influence_types) %>%
+  pull(target)
+
+indirect_influenced <- nodes_tb1 %>% filter(id %in% indirect_influence_targets)
+
+```
+
+## All direct and indirect influence targets in one list
+
+```{r}
+influence_all <- bind_rows(
+  direct_influenced %>% mutate(level = "Direct"),
+  indirect_influenced %>% mutate(level = "Indirect")
+) %>%
+  distinct(id, name, `Node Type`, genre, level)
+
+```
+
+## `visNetwork` Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence
+
+```{r}
+collaborator_ids <- collaborators %>%
+  left_join(nodes_tb1, by = "name") %>%
+  pull(id)
+
+nodes_combined <- nodes_tb1 %>%
+  filter(id %in% c(sailor_id, collaborator_ids, direct_influenced$id, indirect_influenced$id)) %>%
+  mutate(role = case_when(
+    id == sailor_id ~ "Sailor",
+    id %in% collaborator_ids ~ "Collaborator",
+    id %in% direct_influenced$id ~ "Direct Influence",
+    id %in% indirect_influenced$id ~ "Indirect Influence",
+    TRUE ~ "Other"
+  ))
+
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+library(dplyr)
+library(visNetwork)
+
+# Step 1: Setup
+collab_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+influence_types <- c("InStyleOf", "CoverOf", "LyricalReferenceTo", "InterpolatesFrom", "DirectlySamples")
+
+# Step 2: Get Sailor's ID
+sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+
+# Step 3: Collaboration network (works + co-creators)
+sailor_works <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% collab_types) %>%
+  pull(target)
+
+collaborator_edges <- edges_tb1 %>%
+  filter(target %in% sailor_works,
+         `Edge Type` %in% collab_types,
+         source != sailor_id)
+
+collaborator_ids <- collaborator_edges$source
+
+# Step 4: Direct influence
+direct_ids <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% influence_types) %>%
+  pull(target)
+
+# Step 5: Indirect influence
+indirect_ids <- edges_tb1 %>%
+  filter(source %in% direct_ids, `Edge Type` %in% influence_types) %>%
+  pull(target)
+
+# Step 6: Combine node IDs
+all_ids <- unique(c(sailor_id, collaborator_ids, direct_ids, indirect_ids))
+
+nodes_combined <- nodes_tb1 %>%
+  filter(id %in% all_ids) %>%
+  mutate(role = case_when(
+    id == sailor_id ~ "Sailor",
+    id %in% collaborator_ids ~ "Collaborator",
+    id %in% direct_ids ~ "Direct Influence",
+    id %in% indirect_ids ~ "Indirect Influence",
+    TRUE ~ "Other"
+  )) %>%
+  mutate(
+    label = name,
+    title = paste0("<b>", name, "</b><br>Type: ", `Node Type`, "<br>Role: ", role),
+    group = role
+  )
+
+# Step 7: Combine edges among relevant nodes
+edges_combined <- edges_tb1 %>%
+  filter(source %in% nodes_combined$id & target %in% nodes_combined$id)
+
+# Remove existing `from`/`to` if present
+if ("from" %in% colnames(edges_combined) | "to" %in% colnames(edges_combined)) {
+  edges_combined <- edges_combined %>%
+    select(-from, -to)
+}
+
+# Now safely rename
+edges_vis <- edges_combined %>%
+  rename(from = source, to = target) %>%
+  mutate(arrows = "to")
+
+
+# Step 8: Plot using visNetwork
+visNetwork(nodes_combined, edges_combined) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "Sailor", color = "red") %>%
+  visGroups(groupname = "Collaborator", color = "#1f78b4") %>%
+  visGroups(groupname = "Direct Influence", color = "#33a02c") %>%
+  visGroups(groupname = "Indirect Influence", color = "#b2df8a") %>%
+  visPhysics(solver = "forceAtlas2Based") %>%
+  visLayout(randomSeed = 1234) %>%
+  visLegend() %>%
+  visExport()
+
+```
+
+# How has she influenced collaborators of the broader Oceanus Folk community?
+
+### Step 1: Filter edges for collaboration types
+
+```{r}
+collab_types <- c("PerformerOf", "ComposerOf")
+
+graph_collab <- graph %>%
+  activate(edges) %>%
+  filter(`Edge Type` %in% collab_types)
+
+```
+
+### Step 2:Extract only connected nodes
+
+```{r}
+used_node_indices <- graph_collab %>%
+  activate(edges) %>%
+  as_tibble() %>%
+  select(from, to) %>%
+  unlist() %>%
+  unique()
+
+```
+
+### Step 3:Filter to nodes in Oceanus Folk or notable artists
+
+```{r}
+graph_collab <- graph_collab %>%
+  activate(nodes) %>%
+  mutate(row_id = row_number()) %>%
+  filter(row_id %in% used_node_indices,
+         str_to_lower(genre) == "oceanus folk" |
+         is.na(genre) & (notable == TRUE)) %>%
+  select(-row_id)
+
+```
+
+### Step 4: Plot the sub-graph
+
+```{r}
+set.seed(1234)
+ggraph(graph_collab,
+       layout = "fr") +
+  geom_edge_link(aes(color = `Edge Type`), alpha = 0.4) +
+  geom_node_point(aes(color = `Node Type`), size = 2.5) +
+  geom_node_text(aes(label = name), size = 2.5, repel = TRUE) +
+  theme_void() +
+  labs(title = "Collaboration-Based Influence on Oceanus Folk")
+
+```
+
+# Show how Oceanus Folk has influenced or been influenced by other genres — with Sailor as a key node
+
+```{r}
+genre_edges <- edges_tb1 %>%
+  filter(`Edge Type` == "InStyleOf") %>%
+  inner_join(nodes_tb1 %>% select(id, genre), by = c("source" = "id")) %>%
+  inner_join(nodes_tb1 %>% select(id, genre), by = c("target" = "id"), suffix = c("_source", "_target")) %>%
+  filter(!is.na(genre_source), !is.na(genre_target), genre_source != genre_target)
+
+# Create unique genre pairs
+genre_nodes <- tibble(name = unique(c(genre_edges$genre_source, genre_edges$genre_target)))
+genre_edges <- genre_edges %>%
+  select(from = genre_source, to = genre_target) %>%
+  distinct()
+
+# Build and plot genre-level graph
+genre_graph <- tbl_graph(nodes = genre_nodes, edges = genre_edges, directed = TRUE)
+
+ggraph(genre_graph, layout = "circle") +
+  geom_edge_link(arrow = arrow(length = unit(3, "mm")), alpha = 0.5) +
+  geom_node_point(color = "steelblue", size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  labs(title = "Genre-to-Genre Influence Network") +
+  theme_void()
+
+```
+
+## Use visNetwork to present the genre-library(dplyr)
+
+```{r}
+library(dplyr)
+library(visNetwork)
+
+# Step 1: Filter influence-type edges between nodes with valid genre
+influence_types <- c("InStyleOf", "CoverOf", "LyricalReferenceTo", "InterpolatesFrom", "DirectlySamples")
+
+genre_edges <- edges_tb1 %>%
+  filter(`Edge Type` %in% influence_types) %>%
+  left_join(nodes_tb1 %>% select(id, genre), by = c("source" = "id")) %>%
+  rename(source_genre = genre) %>%
+  left_join(nodes_tb1 %>% select(id, genre), by = c("target" = "id")) %>%
+  rename(target_genre = genre) %>%
+  filter(!is.na(source_genre), !is.na(target_genre), source_genre != target_genre)
+
+# Step 2: Create genre-level edge list (aggregate to avoid clutter)
+genre_links <- genre_edges %>%
+  count(source_genre, target_genre, name = "value")
+
+# Step 3: Create unique genre node list
+genre_nodes <- unique(c(genre_links$source_genre, genre_links$target_genre)) %>%
+  as_tibble() %>% rename(label = value) %>%
+  mutate(id = label)
+
+# Step 4: Build visNetwork-compatible data
+nodes_vis <- genre_nodes %>%
+  mutate(group = ifelse(label == "Oceanus Folk", "Oceanus", "Other"),
+         color = ifelse(label == "Oceanus Folk", "#e31a1c", "#1f78b4"))
+
+edges_vis <- genre_links %>%
+  rename(from = source_genre, to = target_genre)
+
+```
+
+```{r}
+ 
+visNetwork(nodes_vis, edges_vis) %>%
+  visEdges(arrows = "to") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLayout(randomSeed = 123) %>%
+  visLegend() %>%
+  visPhysics(solver = "forceAtlas2Based") %>%
+  visHierarchicalLayout(enabled = FALSE) %>%
+  visExport()
+
+```
