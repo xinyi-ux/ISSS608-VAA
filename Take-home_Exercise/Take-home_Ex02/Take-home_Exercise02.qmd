@@ -8,7 +8,7 @@ description: "VAST Challenge 2025 Mini-Challenge 1"
 categories: [tidyverse, haven,ggrepel, ggthemes,ggridges, ggdist,patchwork, scales] 
 execute: 
        echo: true 
-       eval: true 
+       eval: true
        warning: false 
        freeze: true
 ---
@@ -422,6 +422,7 @@ nodes_combined <- nodes_tb1 %>%
 ```{r}
 #| fig-width: 12
 #| fig-height: 12
+ 
 library(dplyr)
 library(visNetwork)
 
@@ -507,6 +508,20 @@ visNetwork(nodes_combined, edges_combined) %>%
 ## 8.1 Summary Table for Each Person collaborated with Sailor
 
 ```{r}
+collab_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# Get Sailor's ID
+sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+
+# Get works Sailor contributed to
+sailor_works <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% collab_types) %>%
+  pull(target)
+
+# Define collab_edges
+collab_edges <- edges_tb1 %>%
+  filter(target %in% sailor_works, `Edge Type` %in% collab_types)
+
 # Count how many times each person collaborated with Sailor
 collaborator_summary <- collab_edges %>%
   filter(target %in% sailor_works, source != sailor_id) %>%
@@ -604,7 +619,7 @@ graph_influence <- tbl_graph(
 
 ```{r}
 library(visNetwork)
-
+ 
 # Step 1: Prepare nodes for visNetwork
 nodes_vis <- nodes_used %>%
   mutate(

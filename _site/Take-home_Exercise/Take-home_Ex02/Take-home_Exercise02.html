@@ -256,32 +256,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">2 Setup</a>
   <ul class="collapse">
   <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">2.1 Loading Packages</a></li>
+  <li><a href="#importing-knowledge-graph-data" id="toc-importing-knowledge-graph-data" class="nav-link" data-scroll-target="#importing-knowledge-graph-data">2.2 Importing Knowledge Graph Data</a></li>
+  <li><a href="#inspect-structure" id="toc-inspect-structure" class="nav-link" data-scroll-target="#inspect-structure">2.3 Inspect Structure</a></li>
+  <li><a href="#extract-and-inspect" id="toc-extract-and-inspect" class="nav-link" data-scroll-target="#extract-and-inspect">2.4 Extract and Inspect</a></li>
   </ul></li>
-  <li><a href="#loading-packages-1" id="toc-loading-packages-1" class="nav-link" data-scroll-target="#loading-packages-1">Loading Packages</a></li>
-  <li><a href="#importing-knowledge-graph-data" id="toc-importing-knowledge-graph-data" class="nav-link" data-scroll-target="#importing-knowledge-graph-data">Importing Knowledge Graph Data</a>
+  <li><a href="#initial-eda" id="toc-initial-eda" class="nav-link" data-scroll-target="#initial-eda">3 Initial EDA</a>
   <ul class="collapse">
-  <li><a href="#inspect-structure" id="toc-inspect-structure" class="nav-link" data-scroll-target="#inspect-structure">Inspect Structure</a></li>
-  <li><a href="#extract-and-inspect" id="toc-extract-and-inspect" class="nav-link" data-scroll-target="#extract-and-inspect">Extract and Inspect</a></li>
-  <li><a href="#initial-eda" id="toc-initial-eda" class="nav-link" data-scroll-target="#initial-eda">Initial EDA</a>
-  <ul class="collapse">
-  <li><a href="#edge-types-for-influence-detection" id="toc-edge-types-for-influence-detection" class="nav-link" data-scroll-target="#edge-types-for-influence-detection">Edge Types for Influence Detection</a></li>
-  <li><a href="#count-each-node-type-in-your-knowledge-graph" id="toc-count-each-node-type-in-your-knowledge-graph" class="nav-link" data-scroll-target="#count-each-node-type-in-your-knowledge-graph">Count each Node Type in your knowledge graph</a></li>
-  </ul></li>
-  <li><a href="#quick-scan-of-missing-values" id="toc-quick-scan-of-missing-values" class="nav-link" data-scroll-target="#quick-scan-of-missing-values">Quick scan of missing values</a></li>
-  <li><a href="#specific-focus" id="toc-specific-focus" class="nav-link" data-scroll-target="#specific-focus">Specific focus</a></li>
-  <li><a href="#visualizing-only-complete-records" id="toc-visualizing-only-complete-records" class="nav-link" data-scroll-target="#visualizing-only-complete-records">Visualizing only complete records</a></li>
-  <li><a href="#creating-knowledge-graph" id="toc-creating-knowledge-graph" class="nav-link" data-scroll-target="#creating-knowledge-graph">Creating Knowledge Graph</a>
+  <li><a href="#edge-types-for-influence-detection" id="toc-edge-types-for-influence-detection" class="nav-link" data-scroll-target="#edge-types-for-influence-detection">3.1 Edge Types for Influence Detection</a></li>
+  <li><a href="#count-each-node-type-in-your-knowledge-graph" id="toc-count-each-node-type-in-your-knowledge-graph" class="nav-link" data-scroll-target="#count-each-node-type-in-your-knowledge-graph">3.2 Count each Node Type in your knowledge graph</a></li>
+  <li><a href="#quick-scan-of-missing-values" id="toc-quick-scan-of-missing-values" class="nav-link" data-scroll-target="#quick-scan-of-missing-values">3.3 Quick scan of missing values</a></li>
+  <li><a href="#specific-focus" id="toc-specific-focus" class="nav-link" data-scroll-target="#specific-focus">3.4 Specific focus</a></li>
+  <li><a href="#visualizing-only-complete-records" id="toc-visualizing-only-complete-records" class="nav-link" data-scroll-target="#visualizing-only-complete-records">3.5 Visualizing only complete records</a></li>
+  <li><a href="#creating-knowledge-graph" id="toc-creating-knowledge-graph" class="nav-link" data-scroll-target="#creating-knowledge-graph">3.6 Creating Knowledge Graph</a>
   <ul class="collapse">
   <li><a href="#step-1-mapping-from-node-id-to-row-index" id="toc-step-1-mapping-from-node-id-to-row-index" class="nav-link" data-scroll-target="#step-1-mapping-from-node-id-to-row-index">Step 1: Mapping from node id to row index</a></li>
   <li><a href="#step-2-map-source-and-target-ids-to-row-indices" id="toc-step-2-map-source-and-target-ids-to-row-indices" class="nav-link" data-scroll-target="#step-2-map-source-and-target-ids-to-row-indices">Step 2 : Map source and target IDs to row indices</a></li>
   <li><a href="#step-3-filter-out-any-unmatchedinvalid-edges" id="toc-step-3-filter-out-any-unmatchedinvalid-edges" class="nav-link" data-scroll-target="#step-3-filter-out-any-unmatchedinvalid-edges">Step 3: Filter out any unmatched(invalid) edges</a></li>
   <li><a href="#step-4-creating-the-graph" id="toc-step-4-creating-the-graph" class="nav-link" data-scroll-target="#step-4-creating-the-graph">Step 4: creating the graph</a></li>
   </ul></li>
-  <li><a href="#visualising-the-knowledge-graph" id="toc-visualising-the-knowledge-graph" class="nav-link" data-scroll-target="#visualising-the-knowledge-graph">Visualising the knowledge graph</a>
-  <ul class="collapse">
-  <li><a href="#visualising-the-whole-graph" id="toc-visualising-the-whole-graph" class="nav-link" data-scroll-target="#visualising-the-whole-graph">Visualising the whole Graph</a></li>
   </ul></li>
-  <li><a href="#visualising-the-sub-graph" id="toc-visualising-the-sub-graph" class="nav-link" data-scroll-target="#visualising-the-sub-graph">Visualising the sub-graph</a>
+  <li><a href="#visualising-the-knowledge-graph" id="toc-visualising-the-knowledge-graph" class="nav-link" data-scroll-target="#visualising-the-knowledge-graph">4 Visualising the knowledge graph</a>
+  <ul class="collapse">
+  <li><a href="#visualising-the-whole-graph" id="toc-visualising-the-whole-graph" class="nav-link" data-scroll-target="#visualising-the-whole-graph">4.1 Visualising the whole Graph</a></li>
+  <li><a href="#visualising-the-sub-graph" id="toc-visualising-the-sub-graph" class="nav-link" data-scroll-target="#visualising-the-sub-graph">4.2 Visualising the sub-graph</a>
   <ul class="collapse">
   <li><a href="#step-1-filter-edges-to-onliy-memberof" id="toc-step-1-filter-edges-to-onliy-memberof" class="nav-link" data-scroll-target="#step-1-filter-edges-to-onliy-memberof">Step 1: Filter edges to onliy “Memberof”</a></li>
   <li><a href="#step-2-extract-only-connected-nodesi.e.-used-in-these-edges" id="toc-step-2-extract-only-connected-nodesi.e.-used-in-these-edges" class="nav-link" data-scroll-target="#step-2-extract-only-connected-nodesi.e.-used-in-these-edges">Step 2: Extract only connected nodes(i.e.&nbsp;used in these edges)</a></li>
@@ -289,25 +286,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#step-4-plot-the-sub-graph" id="toc-step-4-plot-the-sub-graph" class="nav-link" data-scroll-target="#step-4-plot-the-sub-graph">Step 4: Plot the sub-graph</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#sailor-shifts-career-timeline" id="toc-sailor-shifts-career-timeline" class="nav-link" data-scroll-target="#sailor-shifts-career-timeline">Sailor Shift’s Career Timeline</a></li>
-  <li><a href="#who-has-she-been-most-influenced-by-over-time" id="toc-who-has-she-been-most-influenced-by-over-time" class="nav-link" data-scroll-target="#who-has-she-been-most-influenced-by-over-time">Who has she been most influenced by over time?</a></li>
-  <li><a href="#who-has-she-collaborated-with-and-directly-or-indirectly-influenced" id="toc-who-has-she-collaborated-with-and-directly-or-indirectly-influenced" class="nav-link" data-scroll-target="#who-has-she-collaborated-with-and-directly-or-indirectly-influenced">Who has she collaborated with and directly or indirectly influenced?</a>
+  <li><a href="#sailor-shifts-career-timeline" id="toc-sailor-shifts-career-timeline" class="nav-link" data-scroll-target="#sailor-shifts-career-timeline">5 Sailor Shift’s Career Timeline</a></li>
+  <li><a href="#who-has-she-been-most-influenced-by-over-time" id="toc-who-has-she-been-most-influenced-by-over-time" class="nav-link" data-scroll-target="#who-has-she-been-most-influenced-by-over-time">6 Who has she been most influenced by over time?</a></li>
+  <li><a href="#who-has-she-collaborated-with-and-directly-or-indirectly-influenced" id="toc-who-has-she-collaborated-with-and-directly-or-indirectly-influenced" class="nav-link" data-scroll-target="#who-has-she-collaborated-with-and-directly-or-indirectly-influenced">7 Who has she collaborated with and directly or indirectly influenced?</a>
   <ul class="collapse">
-  <li><a href="#who-has-sailor-collaborated-with" id="toc-who-has-sailor-collaborated-with" class="nav-link" data-scroll-target="#who-has-sailor-collaborated-with">Who has Sailor collaborated with?</a></li>
-  <li><a href="#who-has-sailor-influenceddirectly-or-indirectly" id="toc-who-has-sailor-influenceddirectly-or-indirectly" class="nav-link" data-scroll-target="#who-has-sailor-influenceddirectly-or-indirectly">Who has Sailor influenced(directly or indirectly)</a></li>
-  <li><a href="#all-direct-and-indirect-influence-targets-in-one-list" id="toc-all-direct-and-indirect-influence-targets-in-one-list" class="nav-link" data-scroll-target="#all-direct-and-indirect-influence-targets-in-one-list">All direct and indirect influence targets in one list</a></li>
-  <li><a href="#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence" id="toc-visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence" class="nav-link" data-scroll-target="#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence"><code>visNetwork</code> Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence</a></li>
+  <li><a href="#who-has-sailor-collaborated-with" id="toc-who-has-sailor-collaborated-with" class="nav-link" data-scroll-target="#who-has-sailor-collaborated-with">7.1 Who has Sailor collaborated with?</a></li>
+  <li><a href="#who-has-sailor-influenceddirectly-or-indirectly" id="toc-who-has-sailor-influenceddirectly-or-indirectly" class="nav-link" data-scroll-target="#who-has-sailor-influenceddirectly-or-indirectly">7.2 Who has Sailor influenced(directly or indirectly)</a></li>
+  <li><a href="#all-direct-and-indirect-influence-targets-in-one-list" id="toc-all-direct-and-indirect-influence-targets-in-one-list" class="nav-link" data-scroll-target="#all-direct-and-indirect-influence-targets-in-one-list">7.3 All direct and indirect influence targets in one list</a></li>
+  <li><a href="#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence" id="toc-visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence" class="nav-link" data-scroll-target="#visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence">7.4 <code>visNetwork</code> Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence</a></li>
   </ul></li>
-  <li><a href="#how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community" id="toc-how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community" class="nav-link" data-scroll-target="#how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community">How has she influenced collaborators of the broader Oceanus Folk community?</a>
+  <li><a href="#how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community" id="toc-how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community" class="nav-link" data-scroll-target="#how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community">8 How has she influenced collaborators of the broader Oceanus Folk community?</a>
   <ul class="collapse">
-  <li><a href="#step-1-filter-edges-for-collaboration-types" id="toc-step-1-filter-edges-for-collaboration-types" class="nav-link" data-scroll-target="#step-1-filter-edges-for-collaboration-types">Step 1: Filter edges for collaboration types</a></li>
-  <li><a href="#step-2extract-only-connected-nodes" id="toc-step-2extract-only-connected-nodes" class="nav-link" data-scroll-target="#step-2extract-only-connected-nodes">Step 2:Extract only connected nodes</a></li>
-  <li><a href="#step-3filter-to-nodes-in-oceanus-folk-or-notable-artists" id="toc-step-3filter-to-nodes-in-oceanus-folk-or-notable-artists" class="nav-link" data-scroll-target="#step-3filter-to-nodes-in-oceanus-folk-or-notable-artists">Step 3:Filter to nodes in Oceanus Folk or notable artists</a></li>
-  <li><a href="#step-4-plot-the-sub-graph-1" id="toc-step-4-plot-the-sub-graph-1" class="nav-link" data-scroll-target="#step-4-plot-the-sub-graph-1">Step 4: Plot the sub-graph</a></li>
+  <li><a href="#summary-table-for-each-person-collaborated-with-sailor" id="toc-summary-table-for-each-person-collaborated-with-sailor" class="nav-link" data-scroll-target="#summary-table-for-each-person-collaborated-with-sailor">8.1 Summary Table for Each Person collaborated with Sailor</a></li>
+  <li><a href="#starting-to-plot-graphs" id="toc-starting-to-plot-graphs" class="nav-link" data-scroll-target="#starting-to-plot-graphs">8.2 Starting to plot graphs</a>
+  <ul class="collapse">
+  <li><a href="#step-1-filter-collaborators-of-sailor" id="toc-step-1-filter-collaborators-of-sailor" class="nav-link" data-scroll-target="#step-1-filter-collaborators-of-sailor">Step 1: Filter Collaborators of Sailor</a></li>
+  <li><a href="#step-2did-those-collaborators-go-on-to-influence-others" id="toc-step-2did-those-collaborators-go-on-to-influence-others" class="nav-link" data-scroll-target="#step-2did-those-collaborators-go-on-to-influence-others">Step 2:Did those collaborators go on to influence others?</a></li>
+  <li><a href="#step-3-filter-oceanus-folk-targets" id="toc-step-3-filter-oceanus-folk-targets" class="nav-link" data-scroll-target="#step-3-filter-oceanus-folk-targets">Step 3: Filter Oceanus Folk Targets</a></li>
+  <li><a href="#step-4-plot-the-visnetwork-graph" id="toc-step-4-plot-the-visnetwork-graph" class="nav-link" data-scroll-target="#step-4-plot-the-visnetwork-graph">Step 4: Plot the <code>visNetwork</code> graph</a></li>
   </ul></li>
-  <li><a href="#show-how-oceanus-folk-has-influenced-or-been-influenced-by-other-genres-with-sailor-as-a-key-node" id="toc-show-how-oceanus-folk-has-influenced-or-been-influenced-by-other-genres-with-sailor-as-a-key-node" class="nav-link" data-scroll-target="#show-how-oceanus-folk-has-influenced-or-been-influenced-by-other-genres-with-sailor-as-a-key-node">Show how Oceanus Folk has influenced or been influenced by other genres — with Sailor as a key node</a>
-  <ul class="collapse">
-  <li><a href="#use-visnetwork-to-present-the-genre-librarydplyr" id="toc-use-visnetwork-to-present-the-genre-librarydplyr" class="nav-link" data-scroll-target="#use-visnetwork-to-present-the-genre-librarydplyr">Use visNetwork to present the genre-library(dplyr)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -393,21 +390,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><a href="https://gganimate.com/"><strong>gganimate</strong></a><strong>:</strong> The description of animation</p></li>
 <li><p><a href="https://ropensci.org/blog/2018/07/23/gifski-release/#what-is-gifski"><strong>gifski</strong></a><strong>:</strong> To create animated GIF images with thousands of colors per frame</p></li>
 </ul>
-</section>
-</section>
-<section id="loading-packages-1" class="level1">
-<h1>Loading Packages</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, jsonlite, SmartEDA, tidygraph, ggraph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="importing-knowledge-graph-data" class="level1">
-<h1>Importing Knowledge Graph Data</h1>
+<section id="importing-knowledge-graph-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-knowledge-graph-data">2.2 Importing Knowledge Graph Data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>kg <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"MC1_graph.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 <section id="inspect-structure" class="level2">
-<h2 class="anchored" data-anchor-id="inspect-structure">Inspect Structure</h2>
+<h2 class="anchored" data-anchor-id="inspect-structure">2.3 Inspect Structure</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(kg,<span class="at">max.level=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -421,16 +415,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="extract-and-inspect" class="level2">
-<h2 class="anchored" data-anchor-id="extract-and-inspect">Extract and Inspect</h2>
+<h2 class="anchored" data-anchor-id="extract-and-inspect">2.4 Extract and Inspect</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nodes_tb1 <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(kg<span class="sc">$</span>nodes)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>edges_tb1 <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(kg<span class="sc">$</span>links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="initial-eda" class="level2">
-<h2 class="anchored" data-anchor-id="initial-eda">Initial EDA</h2>
-<section id="edge-types-for-influence-detection" class="level3">
-<h3 class="anchored" data-anchor-id="edge-types-for-influence-detection">Edge Types for Influence Detection</h3>
+</section>
+<section id="initial-eda" class="level1">
+<h1>3 Initial EDA</h1>
+<section id="edge-types-for-influence-detection" class="level2">
+<h2 class="anchored" data-anchor-id="edge-types-for-influence-detection">3.1 Edge Types for Influence Detection</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>edges_tb1 <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
@@ -448,8 +443,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="count-each-node-type-in-your-knowledge-graph" class="level3">
-<h3 class="anchored" data-anchor-id="count-each-node-type-in-your-knowledge-graph">Count each Node Type in your knowledge graph</h3>
+<section id="count-each-node-type-in-your-knowledge-graph" class="level2">
+<h2 class="anchored" data-anchor-id="count-each-node-type-in-your-knowledge-graph">3.2 Count each Node Type in your knowledge graph</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nodes_tb1, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>)) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -465,9 +460,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-</section>
 <section id="quick-scan-of-missing-values" class="level2">
-<h2 class="anchored" data-anchor-id="quick-scan-of-missing-values">Quick scan of missing values</h2>
+<h2 class="anchored" data-anchor-id="quick-scan-of-missing-values">3.3 Quick scan of missing values</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>SmartEDA<span class="sc">::</span><span class="fu">ExpData</span>(<span class="at">data =</span> nodes_tb1, <span class="at">type =</span> <span class="dv">1</span>)  <span class="co"># Summary table</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -489,7 +483,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="specific-focus" class="level2">
-<h2 class="anchored" data-anchor-id="specific-focus">Specific focus</h2>
+<h2 class="anchored" data-anchor-id="specific-focus">3.4 Specific focus</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nodes_tb1 <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(name, <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>, genre, release_date, notable), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))) <span class="sc">%&gt;%</span></span>
@@ -508,7 +502,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Based on the <code>nodes_tb1</code>, these missing values are from non-song and non-album nodes. Mostly, they are under <code>Person</code>,<code>RecordLabel</code>,and <code>MusicalGroup</code> column. Those columns do not require <code>genre</code>,<code>release_date</code>,or <code>notable</code>.</p>
 </section>
 <section id="visualizing-only-complete-records" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-only-complete-records">Visualizing only complete records</h2>
+<h2 class="anchored" data-anchor-id="visualizing-only-complete-records">3.5 Visualizing only complete records</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nodes_tb1_filtered <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Node Type</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Song"</span>, <span class="st">"Album"</span>)) <span class="sc">%&gt;%</span></span>
@@ -516,7 +510,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="creating-knowledge-graph" class="level2">
-<h2 class="anchored" data-anchor-id="creating-knowledge-graph">Creating Knowledge Graph</h2>
+<h2 class="anchored" data-anchor-id="creating-knowledge-graph">3.6 Creating Knowledge Graph</h2>
 <section id="step-1-mapping-from-node-id-to-row-index" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-mapping-from-node-id-to-row-index">Step 1: Mapping from node id to row index</h3>
 <p>Before we can go ahead to build the tidygraph object, it is important for us to ensures each id from the node list is mapped to the correct row number. This requirement can be achive by using the code chunk below.</p>
@@ -558,13 +552,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="visualising-the-knowledge-graph" class="level2">
-<h2 class="anchored" data-anchor-id="visualising-the-knowledge-graph">Visualising the knowledge graph</h2>
+</section>
+<section id="visualising-the-knowledge-graph" class="level1">
+<h1>4 Visualising the knowledge graph</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="visualising-the-whole-graph" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-the-whole-graph">Visualising the whole Graph</h3>
+<section id="visualising-the-whole-graph" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-the-whole-graph">4.1 Visualising the whole Graph</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(graph,<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
@@ -577,9 +572,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
 <section id="visualising-the-sub-graph" class="level2">
-<h2 class="anchored" data-anchor-id="visualising-the-sub-graph">Visualising the sub-graph</h2>
+<h2 class="anchored" data-anchor-id="visualising-the-sub-graph">4.2 Visualising the sub-graph</h2>
 <section id="step-1-filter-edges-to-onliy-memberof" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-filter-edges-to-onliy-memberof">Step 1: Filter edges to onliy “Memberof”</h3>
 <div class="cell">
@@ -636,7 +630,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="sailor-shifts-career-timeline" class="level1">
-<h1>Sailor Shift’s Career Timeline</h1>
+<h1>5 Sailor Shift’s Career Timeline</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Get Sailor's ID</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sailor_id <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"Sailor Shift"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(id)</span>
@@ -682,7 +676,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="who-has-she-been-most-influenced-by-over-time" class="level1">
-<h1>Who has she been most influenced by over time?</h1>
+<h1>6 Who has she been most influenced by over time?</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Step 0: Define influence types from edge weights</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>edge_weights <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
@@ -732,9 +726,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="who-has-she-collaborated-with-and-directly-or-indirectly-influenced" class="level1">
-<h1>Who has she collaborated with and directly or indirectly influenced?</h1>
+<h1>7 Who has she collaborated with and directly or indirectly influenced?</h1>
 <section id="who-has-sailor-collaborated-with" class="level2">
-<h2 class="anchored" data-anchor-id="who-has-sailor-collaborated-with">Who has Sailor collaborated with?</h2>
+<h2 class="anchored" data-anchor-id="who-has-sailor-collaborated-with">7.1 Who has Sailor collaborated with?</h2>
 <p>Collaboration means artists who worked on the same songs or albums with Sailor.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>collab_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PerformerOf"</span>, <span class="st">"ComposerOf"</span>, <span class="st">"ProducerOf"</span>, <span class="st">"LyricistOf"</span>)</span>
@@ -756,7 +750,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>After running the code above, we can get a list of Sailor’s direct collaborators, many of whom may also be emerging Oceanus Folk artists.</p>
 </section>
 <section id="who-has-sailor-influenceddirectly-or-indirectly" class="level2">
-<h2 class="anchored" data-anchor-id="who-has-sailor-influenceddirectly-or-indirectly">Who has Sailor influenced(directly or indirectly)</h2>
+<h2 class="anchored" data-anchor-id="who-has-sailor-influenceddirectly-or-indirectly">7.2 Who has Sailor influenced(directly or indirectly)</h2>
 <p>Direct influence: Works that sample, cover, or are inspired by Sailor’s work.</p>
 <p>Indirect influence: Artists influenced by those directly influenced by Sailor.</p>
 <div class="cell">
@@ -778,7 +772,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="all-direct-and-indirect-influence-targets-in-one-list" class="level2">
-<h2 class="anchored" data-anchor-id="all-direct-and-indirect-influence-targets-in-one-list">All direct and indirect influence targets in one list</h2>
+<h2 class="anchored" data-anchor-id="all-direct-and-indirect-influence-targets-in-one-list">7.3 All direct and indirect influence targets in one list</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>influence_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  direct_influenced <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">level =</span> <span class="st">"Direct"</span>),</span>
@@ -788,7 +782,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence" class="level2">
-<h2 class="anchored" data-anchor-id="visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence"><code>visNetwork</code> Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence</h2>
+<h2 class="anchored" data-anchor-id="visnetwork-visualization-of-sailor-shifts-collaborators-and-directindirect-influence">7.4 <code>visNetwork</code> Visualization of Sailor Shift’s Collaborators and Direct/Indirect Influence</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>collaborator_ids <span class="ot">&lt;-</span> collaborators <span class="sc">%&gt;%</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes_tb1, <span class="at">by =</span> <span class="st">"name"</span>) <span class="sc">%&gt;%</span></span>
@@ -890,143 +884,169 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="how-has-she-influenced-collaborators-of-the-broader-oceanus-folk-community" class="level1">
-<h1>How has she influenced collaborators of the broader Oceanus Folk community?</h1>
-<section id="step-1-filter-edges-for-collaboration-types" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-filter-edges-for-collaboration-types">Step 1: Filter edges for collaboration types</h3>
+<h1>8 How has she influenced collaborators of the broader Oceanus Folk community?</h1>
+<section id="summary-table-for-each-person-collaborated-with-sailor" class="level2">
+<h2 class="anchored" data-anchor-id="summary-table-for-each-person-collaborated-with-sailor">8.1 Summary Table for Each Person collaborated with Sailor</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>collab_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PerformerOf"</span>, <span class="st">"ComposerOf"</span>)</span>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>collab_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PerformerOf"</span>, <span class="st">"ComposerOf"</span>, <span class="st">"ProducerOf"</span>, <span class="st">"LyricistOf"</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>graph_collab <span class="ot">&lt;-</span> graph <span class="sc">%&gt;%</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(edges) <span class="sc">%&gt;%</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> collab_types)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="step-2extract-only-connected-nodes" class="level3">
-<h3 class="anchored" data-anchor-id="step-2extract-only-connected-nodes">Step 2:Extract only connected nodes</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>used_node_indices <span class="ot">&lt;-</span> graph_collab <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(edges) <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(from, to) <span class="sc">%&gt;%</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="step-3filter-to-nodes-in-oceanus-folk-or-notable-artists" class="level3">
-<h3 class="anchored" data-anchor-id="step-3filter-to-nodes-in-oceanus-folk-or-notable-artists">Step 3:Filter to nodes in Oceanus Folk or notable artists</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>graph_collab <span class="ot">&lt;-</span> graph_collab <span class="sc">%&gt;%</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row_id <span class="sc">%in%</span> used_node_indices,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">str_to_lower</span>(genre) <span class="sc">==</span> <span class="st">"oceanus folk"</span> <span class="sc">|</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">is.na</span>(genre) <span class="sc">&amp;</span> (notable <span class="sc">==</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>row_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="step-4-plot-the-sub-graph-1" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-plot-the-sub-graph-1">Step 4: Plot the sub-graph</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(graph_collab,</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span>), <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>), <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Collaboration-Based Influence on Oceanus Folk"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Take-home_Exercise02_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Sailor's ID</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>sailor_id <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"Sailor Shift"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(id)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get works Sailor contributed to</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>sailor_works <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> sailor_id, <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> collab_types) <span class="sc">%&gt;%</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(target)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define collab_edges</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>collab_edges <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(target <span class="sc">%in%</span> sailor_works, <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> collab_types)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many times each person collaborated with Sailor</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>collaborator_summary <span class="ot">&lt;-</span> collab_edges <span class="sc">%&gt;%</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(target <span class="sc">%in%</span> sailor_works, source <span class="sc">!=</span> sailor_id) <span class="sc">%&gt;%</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(source) <span class="sc">%&gt;%</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">collab_count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes_tb1, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"source"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>,collab_count) <span class="sc">%&gt;%</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(collab_count))</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Show top 10 collaborators</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>collaborator_summary <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   name                     `Node Type`  collab_count
+   &lt;chr&gt;                    &lt;chr&gt;               &lt;int&gt;
+ 1 "Maya Jensen"            Person                  4
+ 2 "Arlo Sterling"          Person                  3
+ 3 "Lyra Blaze"             Person                  3
+ 4 "Orion Cruz"             Person                  3
+ 5 "Elara May"              Person                  3
+ 6 "Cassian Rae"            Person                  3
+ 7 "The Brine Choir"        MusicalGroup            3
+ 8 "Lila \"Lilly\" Hartman" Person                  3
+ 9 "Jade Thompson"          Person                  3
+10 "Sophie Ramirez"         Person                  3</code></pre>
 </div>
 </div>
 </section>
+<section id="starting-to-plot-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="starting-to-plot-graphs">8.2 Starting to plot graphs</h2>
+<section id="step-1-filter-collaborators-of-sailor" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-filter-collaborators-of-sailor">Step 1: Filter Collaborators of Sailor</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>collab_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PerformerOf"</span>, <span class="st">"ComposerOf"</span>, <span class="st">"ProducerOf"</span>, <span class="st">"LyricistOf"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>sailor_id <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"Sailor Shift"</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(id)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>sailor_works <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> sailor_id, <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> collab_types) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(target)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>collaborator_edges <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(target <span class="sc">%in%</span> sailor_works,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> collab_types,</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>         source <span class="sc">!=</span> sailor_id)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>collaborators <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span> </span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">%in%</span> collaborator_edges<span class="sc">$</span>source)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="show-how-oceanus-folk-has-influenced-or-been-influenced-by-other-genres-with-sailor-as-a-key-node" class="level1">
-<h1>Show how Oceanus Folk has influenced or been influenced by other genres — with Sailor as a key node</h1>
+<section id="step-2did-those-collaborators-go-on-to-influence-others" class="level3">
+<h3 class="anchored" data-anchor-id="step-2did-those-collaborators-go-on-to-influence-others">Step 2:Did those collaborators go on to influence others?</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>genre_edges <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"InStyleOf"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, genre), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"source"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, genre), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"target"</span> <span class="ot">=</span> <span class="st">"id"</span>), <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">"_source"</span>, <span class="st">"_target"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(genre_source), <span class="sc">!</span><span class="fu">is.na</span>(genre_target), genre_source <span class="sc">!=</span> genre_target)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create unique genre pairs</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>genre_nodes <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="fu">unique</span>(<span class="fu">c</span>(genre_edges<span class="sc">$</span>genre_source, genre_edges<span class="sc">$</span>genre_target)))</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>genre_edges <span class="ot">&lt;-</span> genre_edges <span class="sc">%&gt;%</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">from =</span> genre_source, <span class="at">to =</span> genre_target) <span class="sc">%&gt;%</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Build and plot genre-level graph</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>genre_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> genre_nodes, <span class="at">edges =</span> genre_edges, <span class="at">directed =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(genre_graph, <span class="at">layout =</span> <span class="st">"circle"</span>) <span class="sc">+</span></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>)), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Genre-to-Genre Influence Network"</span>) <span class="sc">+</span></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Take-home_Exercise02_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>influence_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"InStyleOf"</span>, <span class="st">"CoverOf"</span>, <span class="st">"LyricalReferenceTo"</span>, <span class="st">"InterpolatesFrom"</span>, <span class="st">"DirectlySamples"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Influence edges originating from collaborators</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>collab_influence_edges <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">%in%</span> collaborators<span class="sc">$</span>id,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> influence_types)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Who they influenced</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>collab_influence_targets <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">%in%</span> collab_influence_edges<span class="sc">$</span>target)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<section id="use-visnetwork-to-present-the-genre-librarydplyr" class="level2">
-<h2 class="anchored" data-anchor-id="use-visnetwork-to-present-the-genre-librarydplyr">Use visNetwork to present the genre-library(dplyr)</h2>
+</section>
+<section id="step-3-filter-oceanus-folk-targets" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-filter-oceanus-folk-targets">Step 3: Filter Oceanus Folk Targets</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visNetwork)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Filter influence-type edges between nodes with valid genre</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>influence_types <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"InStyleOf"</span>, <span class="st">"CoverOf"</span>, <span class="st">"LyricalReferenceTo"</span>, <span class="st">"InterpolatesFrom"</span>, <span class="st">"DirectlySamples"</span>)</span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>oceanus_targets <span class="ot">&lt;-</span> collab_influence_targets <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_to_lower</span>(genre) <span class="sc">==</span> <span class="st">"oceanus folk"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-4-plot-the-visnetwork-graph" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-plot-the-visnetwork-graph">Step 4: Plot the <code>visNetwork</code> graph</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Ensure IDs are characters and unique in nodes</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>nodes_used <span class="ot">&lt;-</span> nodes_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">%in%</span> <span class="fu">c</span>(sailor_id, collaborators<span class="sc">$</span>id, collab_influence_edges<span class="sc">$</span>target)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>genre_edges <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> influence_types) <span class="sc">%&gt;%</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, genre), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"source"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">source_genre =</span> genre) <span class="sc">%&gt;%</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes_tb1 <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, genre), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"target"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">target_genre =</span> genre) <span class="sc">%&gt;%</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(source_genre), <span class="sc">!</span><span class="fu">is.na</span>(target_genre), source_genre <span class="sc">!=</span> target_genre)</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create genre-level edge list (aggregate to avoid clutter)</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>genre_links <span class="ot">&lt;-</span> genre_edges <span class="sc">%&gt;%</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(source_genre, target_genre, <span class="at">name =</span> <span class="st">"value"</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Get valid ID list</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>valid_ids <span class="ot">&lt;-</span> nodes_used<span class="sc">$</span>id</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Filter edges and rename safely</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>edges_used_clean <span class="ot">&lt;-</span> edges_tb1 <span class="sc">%&gt;%</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span> <span class="sc">%in%</span> influence_types,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>         source <span class="sc">%in%</span> valid_ids,</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>         target <span class="sc">%in%</span> valid_ids) <span class="sc">%&gt;%</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">as.character</span>(source), <span class="at">target =</span> <span class="fu">as.character</span>(target)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source, target, <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">from =</span> source, <span class="at">to =</span> target)</span>
 <span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Create unique genre node list</span></span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>genre_nodes <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">c</span>(genre_links<span class="sc">$</span>source_genre, genre_links<span class="sc">$</span>target_genre)) <span class="sc">%&gt;%</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">label =</span> value) <span class="sc">%&gt;%</span></span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> label)</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Build visNetwork-compatible data</span></span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>nodes_vis <span class="ot">&lt;-</span> genre_nodes <span class="sc">%&gt;%</span></span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">ifelse</span>(label <span class="sc">==</span> <span class="st">"Oceanus Folk"</span>, <span class="st">"Oceanus"</span>, <span class="st">"Other"</span>),</span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">color =</span> <span class="fu">ifelse</span>(label <span class="sc">==</span> <span class="st">"Oceanus Folk"</span>, <span class="st">"#e31a1c"</span>, <span class="st">"#1f78b4"</span>))</span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>edges_vis <span class="ot">&lt;-</span> genre_links <span class="sc">%&gt;%</span></span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">from =</span> source_genre, <span class="at">to =</span> target_genre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>graph_influence <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">nodes =</span> nodes_used,</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">edges =</span> edges_used_clean,</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">node_key =</span> <span class="st">"id"</span>,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(nodes_vis, edges_vis) <span class="sc">%&gt;%</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visEdges</span>(<span class="at">arrows =</span> <span class="st">"to"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visOptions</span>(<span class="at">highlightNearest =</span> <span class="cn">TRUE</span>, <span class="at">nodesIdSelection =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">123</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLegend</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visPhysics</span>(<span class="at">solver =</span> <span class="st">"forceAtlas2Based"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visHierarchicalLayout</span>(<span class="at">enabled =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visExport</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visNetwork)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Prepare nodes for visNetwork</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>nodes_vis <span class="ot">&lt;-</span> nodes_used <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> <span class="fu">as.character</span>(id),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> name,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"&lt;b&gt;"</span>, name, <span class="st">"&lt;/b&gt;&lt;br&gt;Type: "</span>, <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>, <span class="st">"&lt;br&gt;Genre: "</span>, genre),</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">group =</span> <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span>,  <span class="co"># Node coloring by type</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">case_when</span>(</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Person"</span> <span class="sc">~</span> <span class="st">"#1f78b4"</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Song"</span> <span class="sc">~</span> <span class="st">"#33a02c"</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Node Type</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Album"</span> <span class="sc">~</span> <span class="st">"#fb9a99"</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"#cccccc"</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, label, title, group, color)</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Prepare edges for visNetwork</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>edges_vis <span class="ot">&lt;-</span> edges_used_clean <span class="sc">%&gt;%</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">arrows =</span> <span class="st">"to"</span>,</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">`</span><span class="at">Edge Type</span><span class="st">`</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#999999"</span></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(from, to, label, arrows, color)</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Plot with visNetwork</span></span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(nodes_vis, edges_vis, <span class="at">height =</span> <span class="st">"700px"</span>, <span class="at">width =</span> <span class="st">"100%"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visEdges</span>(<span class="at">smooth =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visOptions</span>(<span class="at">highlightNearest =</span> <span class="cn">TRUE</span>, <span class="at">nodesIdSelection =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLegend</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">1234</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visPhysics</span>(<span class="at">stabilization =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="visNetwork html-widget html-fill-item" id="htmlwidget-a50938847841553bf116" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-a50938847841553bf116">{"x":{"nodes":{"label":["Alternative Rock","Americana","Avant-Garde Folk","Blues Rock","Darkwave","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Speed Metal","Symphonic Metal","Synthpop","Synthwave","Celtic Folk"],"id":["Alternative Rock","Americana","Avant-Garde Folk","Blues Rock","Darkwave","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Speed Metal","Symphonic Metal","Synthpop","Synthwave","Celtic Folk"],"group":["Other","Other","Other","Other","Other","Other","Other","Other","Other","Other","Other","Other","Other","Other","Oceanus","Other","Other","Other","Other","Other","Other","Other","Other","Other"],"color":["#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#e31a1c","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4"]},"edges":{"from":["Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Alternative Rock","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Americana","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Avant-Garde Folk","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Blues Rock","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Darkwave","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Desert Rock","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Doom Metal","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Dream Pop","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Emo/Pop Punk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Folk","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Pop","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Indie Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Jazz Surf Rock","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Lo-Fi Electronica","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Oceanus Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Post-Apocalyptic Folk","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Psychedelic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Southern Gothic Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Space Rock","Speed Metal","Speed Metal","Speed Metal","Speed Metal","Speed Metal","Speed Metal","Speed Metal","Speed Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Symphonic Metal","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthpop","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave","Synthwave"],"to":["Americana","Avant-Garde Folk","Blues Rock","Darkwave","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Psychedelic Rock","Southern Gothic Rock","Speed Metal","Symphonic Metal","Synthwave","Darkwave","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Space Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Blues Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Pop","Jazz Surf Rock","Southern Gothic Rock","Synthpop","Alternative Rock","Avant-Garde Folk","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthwave","Alternative Rock","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Space Rock","Symphonic Metal","Synthwave","Alternative Rock","Americana","Blues Rock","Darkwave","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Space Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Americana","Darkwave","Desert Rock","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Speed Metal","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Americana","Avant-Garde Folk","Blues Rock","Darkwave","Desert Rock","Doom Metal","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Speed Metal","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Avant-Garde Folk","Blues Rock","Doom Metal","Dream Pop","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Psychedelic Rock","Southern Gothic Rock","Synthwave","Alternative Rock","Americana","Blues Rock","Darkwave","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Pop","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Avant-Garde Folk","Blues Rock","Doom Metal","Emo/Pop Punk","Indie Rock","Lo-Fi Electronica","Psychedelic Rock","Southern Gothic Rock","Space Rock","Alternative Rock","Americana","Avant-Garde Folk","Blues Rock","Darkwave","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Jazz Surf Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Americana","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Lo-Fi Electronica","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthwave","Alternative Rock","Avant-Garde Folk","Blues Rock","Darkwave","Desert Rock","Dream Pop","Emo/Pop Punk","Indie Pop","Indie Rock","Psychedelic Rock","Southern Gothic Rock","Speed Metal","Synthwave","Alternative Rock","Americana","Avant-Garde Folk","Blues Rock","Celtic Folk","Desert Rock","Doom Metal","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Post-Apocalyptic Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Americana","Avant-Garde Folk","Darkwave","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Psychedelic Rock","Southern Gothic Rock","Space Rock","Symphonic Metal","Synthwave","Alternative Rock","Americana","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Pop","Indie Rock","Jazz Surf Rock","Lo-Fi Electronica","Symphonic Metal","Synthwave","Alternative Rock","Avant-Garde Folk","Blues Rock","Dream Pop","Emo/Pop Punk","Indie Folk","Indie Pop","Jazz Surf Rock","Lo-Fi Electronica","Speed Metal","Alternative Rock","Americana","Darkwave","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Symphonic Metal","Synthpop","Synthwave","Alternative Rock","Blues Rock","Dream Pop","Indie Folk","Lo-Fi Electronica","Oceanus Folk","Southern Gothic Rock","Synthpop","Alternative Rock","Americana","Darkwave","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Space Rock","Synthwave","Americana","Darkwave","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Southern Gothic Rock","Speed Metal","Symphonic Metal","Synthwave","Alternative Rock","Americana","Blues Rock","Darkwave","Desert Rock","Doom Metal","Dream Pop","Indie Folk","Indie Rock","Jazz Surf Rock","Oceanus Folk","Post-Apocalyptic Folk","Psychedelic Rock","Space Rock","Symphonic Metal","Synthpop"],"value":[2,17,19,2,1,5,58,11,13,22,9,12,9,3,3,48,22,2,22,3,6,42,23,33,10,2,1,11,1,8,3,6,4,18,19,9,1,2,9,25,1,48,1,6,2,1,4,2,8,2,20,3,42,1,1,1,1,3,14,22,1,9,1,12,1,2,5,3,5,4,18,2,4,1,4,38,19,64,5,5,1,50,2,15,3,1,5,18,4,8,1,13,19,69,45,4,7,5,8,1,11,3,45,51,47,2,5,30,19,70,1,109,3,48,16,3,42,29,106,12,26,1,10,6,156,6,9,17,1,3,1,22,1,1,9,1,1,36,1,14,20,1,4,14,142,64,3,1,15,5,42,3,10,5,3,12,7,54,5,22,16,3,21,1,3,1,57,1,10,6,2,1,2,50,21,1,14,1,5,1,3,2,17,2,5,2,1,32,10,6,6,21,33,3,23,1,4,2,8,6,7,1,8,4,19,4,7,2,1,1,5,3,7,3,2,10,4,7,8,5,2,4,1,9,14,15,1,100,1,8,1,1,2,12,4,4,3,10,19,2,8,1,10,2,16,26,8,6,4,3,17,1,4,1,12,1,6,5,11,28,10,1,2,1,1,1,13,12,21,29,3,10,1,122,3,2,5,1,14,7,11,27,38,28,11,8,35,13,11,5,6,26,1,1,1,1,2,1,8,1,1,6,2,12,9,11,1,2,2,1,7,1,10,1,1,1,7,7,5,2,1,4,3,1,2,1,6,4,17,2,8,14,163,80,74,20,14,16,10,25,17,8,2]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"edges":{"arrows":"to"},"layout":{"randomSeed":123,"hierarchical":{"enabled":false}},"physics":{"solver":"forceAtlas2Based"}},"groups":["Other","Oceanus"],"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":true,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true},"export":{"type":"png","css":"float:right;-webkit-border-radius: 10;\n                  -moz-border-radius: 10;\n                  border-radius: 10px;\n                  font-family: Arial;\n                  color: #ffffff;\n                  font-size: 12px;\n                  background: #090a0a;\n                  padding: 4px 8px 4px 4px;\n                  text-decoration: none;","background":"#fff","name":"network.png","label":"Export as png"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a50938847841553bf116" style="width:100%;height:700px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a50938847841553bf116">{"x":{"nodes":{"id":["16958","16959","16960","16983","16984","16985","16986","16987","16993","16994","16995","16996","17041","17042","17043","17044","17045","17046","17118","17119","17120","17164","17165","17166","17167","17189","17190","17191","17192","17205","17206","17207","17226","17227","17228","17229","17230","17248","17249","17250","17255","17256","17257","17258","17259","17260","17296","17299","17309","17310","17311","17314","17327","17349","17355"],"label":["Zane Cruz","Iris Moon","Violet Engines","Sophie Bennett","Michael Harris","Kara Lee","Ethan Clarke","Tidal Reverie","Olivia Carter","Lucas Bennett","Maya Torres","Crimson Carriage","Arlo Sterling","Lyra Blaze","Orion Cruz","Elara May","Cassian Rae","The Brine Choir","Zachary Cole","Lia Grant","Selkie's Hollow","Rusty Riggins","Finn McGraw","William Tidewell","The Salty Wakes","Ewan MacCrae","Astrid Nørgaard","Freya Lindholm","The Fiddle & The Fjord","Liam O'Sullivan","Fiona Mercer","Wayfinder's Lament","Kai Reynolds","Aiden Harper","Finn Morgan","Skylar Brooks","The Wave Riders","Mia Waters","Lila Rivers","Siren's Call","Sailor Shift","Maya Jensen","Lila \"Lilly\" Hartman","Jade Thompson","Sophie Ramirez","Ivy Echos","Coralia Bellweather","The Saltwater Weavers","Levi Holloway","Marin Thorne","Jonah Calloway","The Tide Singer's Knot","Drowned Harbor","Beatrice Albright","Daniel O'Connell"],"title":["<b>Zane Cruz<\/b><br>Type: Person<br>Genre: NA","<b>Iris Moon<\/b><br>Type: Person<br>Genre: NA","<b>Violet Engines<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Sophie Bennett<\/b><br>Type: Person<br>Genre: NA","<b>Michael Harris<\/b><br>Type: Person<br>Genre: NA","<b>Kara Lee<\/b><br>Type: Person<br>Genre: NA","<b>Ethan Clarke<\/b><br>Type: Person<br>Genre: NA","<b>Tidal Reverie<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Olivia Carter<\/b><br>Type: Person<br>Genre: NA","<b>Lucas Bennett<\/b><br>Type: Person<br>Genre: NA","<b>Maya Torres<\/b><br>Type: Person<br>Genre: NA","<b>Crimson Carriage<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Arlo Sterling<\/b><br>Type: Person<br>Genre: NA","<b>Lyra Blaze<\/b><br>Type: Person<br>Genre: NA","<b>Orion Cruz<\/b><br>Type: Person<br>Genre: NA","<b>Elara May<\/b><br>Type: Person<br>Genre: NA","<b>Cassian Rae<\/b><br>Type: Person<br>Genre: NA","<b>The Brine Choir<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Zachary Cole<\/b><br>Type: Person<br>Genre: NA","<b>Lia Grant<\/b><br>Type: Person<br>Genre: NA","<b>Selkie's Hollow<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Rusty Riggins<\/b><br>Type: Person<br>Genre: NA","<b>Finn McGraw<\/b><br>Type: Person<br>Genre: NA","<b>William Tidewell<\/b><br>Type: Person<br>Genre: NA","<b>The Salty Wakes<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Ewan MacCrae<\/b><br>Type: Person<br>Genre: NA","<b>Astrid Nørgaard<\/b><br>Type: Person<br>Genre: NA","<b>Freya Lindholm<\/b><br>Type: Person<br>Genre: NA","<b>The Fiddle & The Fjord<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Liam O'Sullivan<\/b><br>Type: Person<br>Genre: NA","<b>Fiona Mercer<\/b><br>Type: Person<br>Genre: NA","<b>Wayfinder's Lament<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Kai Reynolds<\/b><br>Type: Person<br>Genre: NA","<b>Aiden Harper<\/b><br>Type: Person<br>Genre: NA","<b>Finn Morgan<\/b><br>Type: Person<br>Genre: NA","<b>Skylar Brooks<\/b><br>Type: Person<br>Genre: NA","<b>The Wave Riders<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Mia Waters<\/b><br>Type: Person<br>Genre: NA","<b>Lila Rivers<\/b><br>Type: Person<br>Genre: NA","<b>Siren's Call<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Sailor Shift<\/b><br>Type: Person<br>Genre: NA","<b>Maya Jensen<\/b><br>Type: Person<br>Genre: NA","<b>Lila \"Lilly\" Hartman<\/b><br>Type: Person<br>Genre: NA","<b>Jade Thompson<\/b><br>Type: Person<br>Genre: NA","<b>Sophie Ramirez<\/b><br>Type: Person<br>Genre: NA","<b>Ivy Echos<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Coralia Bellweather<\/b><br>Type: Person<br>Genre: NA","<b>The Saltwater Weavers<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Levi Holloway<\/b><br>Type: Person<br>Genre: NA","<b>Marin Thorne<\/b><br>Type: Person<br>Genre: NA","<b>Jonah Calloway<\/b><br>Type: Person<br>Genre: NA","<b>The Tide Singer's Knot<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Drowned Harbor<\/b><br>Type: MusicalGroup<br>Genre: NA","<b>Beatrice Albright<\/b><br>Type: Person<br>Genre: NA","<b>Daniel O'Connell<\/b><br>Type: Person<br>Genre: NA"],"group":["Person","Person","MusicalGroup","Person","Person","Person","Person","MusicalGroup","Person","Person","Person","MusicalGroup","Person","Person","Person","Person","Person","MusicalGroup","Person","Person","MusicalGroup","Person","Person","Person","MusicalGroup","Person","Person","Person","MusicalGroup","Person","Person","MusicalGroup","Person","Person","Person","Person","MusicalGroup","Person","Person","MusicalGroup","Person","Person","Person","Person","Person","MusicalGroup","Person","MusicalGroup","Person","Person","Person","MusicalGroup","MusicalGroup","Person","Person"],"color":["#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#1f78b4","#cccccc","#1f78b4","#cccccc","#1f78b4","#1f78b4","#1f78b4","#cccccc","#cccccc","#1f78b4","#1f78b4"]},"edges":{"from":["16960","16960","16987","16987","16996","16996","17046","17120","17120","17230","17250","17250","17255","17255","17255","17255","17260","17260","17260","17260","17349","17349","17355","17355"],"to":["17260","17314","17299","17314","17260","17299","17327","17260","17314","17327","17327","17314","17260","17299","17327","17192","17167","17314","17299","17192","17260","17327","17207","17314"],"label":["InStyleOf","InterpolatesFrom","CoverOf","InStyleOf","LyricalReferenceTo","InStyleOf","DirectlySamples","LyricalReferenceTo","InStyleOf","InterpolatesFrom","DirectlySamples","InStyleOf","DirectlySamples","InStyleOf","LyricalReferenceTo","InStyleOf","InStyleOf","InStyleOf","LyricalReferenceTo","InterpolatesFrom","InStyleOf","LyricalReferenceTo","InStyleOf","LyricalReferenceTo"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"],"color":["#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999","#999999"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"edges":{"smooth":false},"layout":{"randomSeed":1234},"physics":{"stabilization":true}},"groups":["Person","MusicalGroup"],"width":"100%","height":"700px","idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":true,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 
 
+</section>
 </section>
 </section>
 
