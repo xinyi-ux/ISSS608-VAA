@@ -317,4 +317,3 @@ boxmap <- function(vnam, df,
 tmap_mode("plot")
 boxmap("wp_nonfunctional", NGA_wp)
 ```
-

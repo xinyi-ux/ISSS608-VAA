@@ -346,20 +346,31 @@ Collaboration means artists who worked on the same songs or albums with Sailor.
 ```{r}
 collab_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
 
-# Get Sailor's ID
-sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+# Step 1: Get Sailor's ID
+sailor_id <- nodes_tb1 %>%
+  filter(name == "Sailor Shift") %>%
+  pull(id)
 
-# Find works Sailor contributed to
+# Step 2: Get all works Sailor contributed to (songs or albums)
 sailor_works <- edges_tb1 %>%
   filter(source == sailor_id, `Edge Type` %in% collab_types) %>%
   pull(target)
 
-# Find other artists who also worked on those works
-collaborators <- edges_tb1 %>%
-  filter(target %in% sailor_works, `Edge Type` %in% collab_types, source != sailor_id) %>%
+# Step 3: Find collaborators (distinct person per work)
+collaborator_summary <- edges_tb1 %>%
+  filter(target %in% sailor_works,
+         `Edge Type` %in% collab_types,
+         source != sailor_id) %>%
+  distinct(source, target) %>%  # ensure 1 collaboration per work per person
+  count(source, name = "collab_count") %>%
   left_join(nodes_tb1, by = c("source" = "id")) %>%
-  distinct(name, `Node Type`, genre, notable)
- 
+  select(name, `Node Type`, collab_count) %>%
+  arrange(desc(collab_count))
+
+collaborator_summary %>%
+  slice_head(n = 10) %>%
+  knitr::kable(caption = "Top 10 Collaborators with Sailor Shift (Unique per Work)")
+
 ```
 
 After running the code above, we can get a list of Sailor's direct collaborators, many of whom may also be emerging Oceanus Folk artists.
@@ -387,6 +398,68 @@ indirect_influence_targets <- edges_tb1 %>%
 
 indirect_influenced <- nodes_tb1 %>% filter(id %in% indirect_influence_targets)
 
+```
+
+Each arrow points from a collaborator to Sailor Shift, indicating they worked together on at least one unique musical work. The graph consolidates multiple roles per person per work to avoid inflating collaboration counts.
+
+```{r}
+library(visNetwork)
+
+# 1. 合作类型定义
+collab_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+# 2. 获取 Sailor 的 ID
+sailor_id <- nodes_tb1 %>% filter(name == "Sailor Shift") %>% pull(id)
+
+# 3. 获取她参与的作品
+sailor_works <- edges_tb1 %>%
+  filter(source == sailor_id, `Edge Type` %in% collab_types) %>%
+  pull(target)
+
+# 4. 找出合作人（每人每作品一次）
+collab_edges_unique <- edges_tb1 %>%
+  filter(target %in% sailor_works,
+         `Edge Type` %in% collab_types,
+         source != sailor_id) %>%
+  distinct(source, target)
+
+# 5. 构建节点（包括 Sailor 和合作人）
+collaborator_ids <- unique(collab_edges_unique$source)
+
+nodes_vis <- nodes_tb1 %>%
+  filter(id %in% c(sailor_id, collaborator_ids)) %>%
+  mutate(
+    id = as.character(id),
+    label = name,
+    group = ifelse(id == sailor_id, "Sailor", "Collaborator"),
+    title = paste0("<b>", name, "</b><br>Type: ", `Node Type`)
+  ) %>%
+  select(id, label, group, title)
+
+# 6. 构建边（合作人 → Sailor，表示他们共同参与作品）
+edges_vis <- collab_edges_unique %>%
+  mutate(
+    from = as.character(source),
+    to = as.character(sailor_id),
+    arrows = "to",                 # 显示箭头
+    label = "collaborated on",    # 可选，添加边的文字说明
+    color = "#888888"             # 灰色边
+  ) %>%
+  select(from, to, arrows, label, color)
+
+# 7. 绘图：加箭头、分组、图例
+visNetwork(nodes_vis, edges_vis, height = "600px", width = "100%") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visGroups(groupname = "Sailor", color = "red") %>%
+  visGroups(groupname = "Collaborator", color = "#1f78b4") %>%
+  visLayout(randomSeed = 42) %>%
+  visLegend() %>%
+  visPhysics(stabilization = TRUE)
+
+```
+
+```{r}
+length(collaborator_ids)
 ```
 
 ## 7.3 All direct and indirect influence targets in one list
